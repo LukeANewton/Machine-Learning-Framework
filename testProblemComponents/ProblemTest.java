@@ -53,9 +53,6 @@ public class ProblemTest {
 	
 	@Test
 	public void testGetTrainingExample(){
-		System.out.println(problem.getTrainingExample(0).toString());
-		System.out.println(trainingExamples.get(0).toString());
-		
 		assertTrue(problem.getTrainingExample(0).equals(trainingExamples.get(0)));
 	}
 	
