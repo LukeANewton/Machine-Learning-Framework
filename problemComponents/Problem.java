@@ -239,17 +239,17 @@ public class Problem implements Serializable{
 		s += "Training Exmaples:\n";
 		s += trainingExamples.toString();
 
-		s += "Test Exmaples:\n";
+		s += "\n\nTest Exmaples:\n";
 		s += testExamples.toString();
 
-		s += "fieldNames:\n";
+		s += "\n\nfieldNames:\n";
 		for(int i = 0; i < fieldNames.size(); i++){
 			s += fieldNames.get(i);
 			if(i < fieldNames.size() - 1)
 				s += ", ";
 		}
 
-		s += "\nweights:\n";
+		s += "\n\nweights:\n";
 		for(int i = 0; i < weights.length; i++){
 			s += weights[i];
 			if(i < weights.length - 1)
