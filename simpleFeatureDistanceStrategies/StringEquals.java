@@ -8,6 +8,8 @@ package simpleFeatureDistanceStrategies;
  *
  */
 public class StringEquals implements SimpleDistanceStrategy {
+	private static final long serialVersionUID = 2807014714344619100L;
+
 	/* (non-Javadoc)
 	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
 	 */

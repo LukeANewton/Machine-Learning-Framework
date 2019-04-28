@@ -8,6 +8,8 @@ package simpleFeatureDistanceStrategies;
  *
  */
 public class CharacterAbsDistance implements SimpleDistanceStrategy {
+	private static final long serialVersionUID = -4660522593091406211L;
+
 	/* (non-Javadoc)
 	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
 	 */

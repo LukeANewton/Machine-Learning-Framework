@@ -10,6 +10,7 @@ import problemComponents.CompositeFeature;
  *
  */
 public class CompositeEquivalence implements CompositeDistanceStrategy {
+	private static final long serialVersionUID = 4817886592858489018L;
 
 	/* (non-Javadoc)
 	 * @see compositeDistanceFunctions.CompositeDistanceFunction#calculateDistance(problemComponents.CompositeFeature, problemComponents.CompositeFeature)

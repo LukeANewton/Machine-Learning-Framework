@@ -13,6 +13,7 @@ import problemComponents.Feature;
  *
  */
 public class ManhattanDistance implements CompositeDistanceStrategy {
+	private static final long serialVersionUID = 8032513187384507434L;
 
 	/* (non-Javadoc)
 	 * @see compositeDistanceFunctions.CompositeDistanceFunction#calculateDistance(problemComponents.CompositeFeature, problemComponents.CompositeFeature)

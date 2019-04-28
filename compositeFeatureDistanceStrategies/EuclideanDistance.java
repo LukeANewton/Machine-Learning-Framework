@@ -13,6 +13,8 @@ import problemComponents.Feature;
  *
  */
 public class EuclideanDistance implements CompositeDistanceStrategy {
+	private static final long serialVersionUID = -9017616718850870403L;
+
 	/* (non-Javadoc)
 	 * @see compositeDistanceFunctions.CompositeDistanceFunction#calculateDistance(problemComponents.CompositeFeature, problemComponents.CompositeFeature)
 	 */

@@ -23,14 +23,16 @@ public class TrainingExample extends Example {
 	
 	@Override
 	public boolean equals(Object o){
-		if(!(o instanceof TestExample))
+		if(!(o instanceof TrainingExample))
 			return false;
 
-		ArrayList<Feature> oFields = ((TestExample)o).getFields();
+		ArrayList<Feature> oFields = ((TrainingExample)o).getFields();
 
 		int maxSize =  Math.min(fields.size(), oFields.size());
-		for(int i = 0; i < maxSize; i++){
-			if(!fields.get(i).equals(oFields.get(i)))
+		for(int i = 0; i < maxSize; i++){	
+			if(fields.get(i) == null && oFields.get(i) == null)
+				continue;	
+			else if(!fields.get(i).equals(oFields.get(i)))
 				return false;
 		}
 		return true;
@@ -47,5 +49,9 @@ public class TrainingExample extends Example {
 		buf.append("]");
 		
 		return buf.toString();
+	}
+	
+	public TestExample toTestExample(){
+		return new TestExample(this.fields);
 	}
 }

@@ -8,6 +8,7 @@ package exampleDistanceCombinationStrategies;
  *
  */
 public class ManhattanDistance implements ExampleDistanceStrategy {
+	private static final long serialVersionUID = -6821258004429397729L;
 
 	/* (non-Javadoc)
 	 * @see exampleDistanceCombinationFunctions.ExampleDistanceStrategy#combineDistances(java.lang.Double[][], int)

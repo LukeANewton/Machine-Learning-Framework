@@ -8,6 +8,7 @@ package exampleDistanceCombinationStrategies;
  *
  */
 public class EuclidianDistance implements ExampleDistanceStrategy {
+	private static final long serialVersionUID = -6300516453575014588L;
 
 	/* (non-Javadoc)
 	 * @see exampleDistanceCombinationFunctions.ExampleDistanceStrategy#combineDistances(java.lang.Double[][], int)

@@ -8,6 +8,7 @@ package exampleDistanceCombinationStrategies;
  *
  */
 public class SimpleSummation implements ExampleDistanceStrategy {
+	private static final long serialVersionUID = -937276725165455857L;
 
 	/* (non-Javadoc)
 	 * @see exampleDistanceCombinationFunctions.ExampleDistanceFunction#combineDistances(java.lang.Double[][])

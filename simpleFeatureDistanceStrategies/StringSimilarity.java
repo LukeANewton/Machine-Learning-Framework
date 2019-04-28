@@ -8,6 +8,8 @@ package simpleFeatureDistanceStrategies;
  *
  */
 public class StringSimilarity implements SimpleDistanceStrategy {
+	private static final long serialVersionUID = 2725121923889622758L;
+
 	/* (non-Javadoc)
 	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
 	 */

@@ -13,6 +13,7 @@ import problemComponents.Feature;
  *
  */
 public class ChebyshevDistance implements CompositeDistanceStrategy {
+	private static final long serialVersionUID = 5487324118631234054L;
 
 	/* (non-Javadoc)
 	 * @see compositeDistanceFunctions.CompositeDistanceFunction#calculateDistance(problemComponents.CompositeFeature, problemComponents.CompositeFeature)

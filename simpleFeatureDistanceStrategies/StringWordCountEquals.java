@@ -8,6 +8,8 @@ package simpleFeatureDistanceStrategies;
  *
  */
 public class StringWordCountEquals implements SimpleDistanceStrategy {
+	private static final long serialVersionUID = -1438497454897192353L;
+
 	/* (non-Javadoc)
 	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
 	 */

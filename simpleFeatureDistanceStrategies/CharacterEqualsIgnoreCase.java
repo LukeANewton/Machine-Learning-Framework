@@ -8,6 +8,8 @@ package simpleFeatureDistanceStrategies;
  *
  */
 public class CharacterEqualsIgnoreCase implements SimpleDistanceStrategy {
+	private static final long serialVersionUID = 875718718876069346L;
+
 	/* (non-Javadoc)
 	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
 	 */

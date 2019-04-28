@@ -30,7 +30,7 @@ public class TestExample extends Example {
 	public TestExample(ArrayList<Feature> knownFeatures, int unknownPos){
 		super();
 		fields = knownFeatures;
-		unknownFeature = null;
+		unknownFeature = knownFeatures.get(unknownPos);
 		unknownFeaturePosition = unknownPos;
 	}
 	
@@ -40,7 +40,7 @@ public class TestExample extends Example {
 	 * @param knownFeatures the collection of known features in this data point
 	 */
 	public TestExample(ArrayList<Feature> knownFeatures){
-		this(knownFeatures, knownFeatures.size());
+		this(knownFeatures, knownFeatures.size() - 1);
 	}
 
 	/** 
@@ -51,7 +51,6 @@ public class TestExample extends Example {
 	 */
 	public TrainingExample toTrainingExample(){
 		ArrayList<Feature> features = fields;
-		features.add(unknownFeaturePosition, unknownFeature);
 		return new TrainingExample(features);
 	}
 	
@@ -62,7 +61,19 @@ public class TestExample extends Example {
 	
 	@Override
 	public boolean equals(Object o){
-		return this.toTrainingExample().equals(o);
+		if(!(o instanceof TestExample))
+			return false;
+		
+		ArrayList<Feature> oFields = ((TestExample)o).getFields();
+
+		int maxSize =  Math.min(fields.size(), oFields.size());
+		for(int i = 0; i < maxSize; i++){	
+			if(fields.get(i) == null || oFields.get(i) == null)
+				continue;	
+			else if(!fields.get(i).equals(oFields.get(i)))
+				return false;
+		}
+		return true;
 	}
 	
 	/** returns the unknown feature value in this TestExample */

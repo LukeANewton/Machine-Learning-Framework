@@ -8,6 +8,8 @@ package simpleFeatureDistanceStrategies;
  *
  */
 public class IntegerAbsDistance implements SimpleDistanceStrategy {
+	private static final long serialVersionUID = -6432387596184672953L;
+
 	/* (non-Javadoc)
 	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
 	 */

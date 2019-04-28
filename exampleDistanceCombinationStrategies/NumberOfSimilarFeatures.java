@@ -8,6 +8,7 @@ package exampleDistanceCombinationStrategies;
  *
  */
 public class NumberOfSimilarFeatures implements ExampleDistanceStrategy {
+	private static final long serialVersionUID = 31380462582020671L;
 
 	/* (non-Javadoc)
 	 * @see exampleDistanceCombinationFunctions.ExampleDistanceStrategy#combineDistances(java.lang.Double[][], int)
