@@ -24,7 +24,6 @@ import problemComponents.Problem;
  * This class is the contents and functionality to display the problem contents
  * 
  * @author luke newton, madelyn krasnay
- * @version 3
  */
 public class DisplayProblemContents extends Container {
 	//serialized ID

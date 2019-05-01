@@ -35,7 +35,6 @@ import simpleFeatureDistanceStrategies.*;
  * to have these be customizable
  * 
  * @author luke newton
- * @version 2
  *
  */
 public class PredictTestPanel extends Container {

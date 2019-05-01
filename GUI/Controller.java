@@ -21,7 +21,6 @@ import problemComponents.Problem;
  * function.
  * 
  * @author luke newton, madelyn krasnay
- * @version 2
  *
  */
 public class Controller  extends JFrame{

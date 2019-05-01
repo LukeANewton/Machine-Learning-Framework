@@ -10,7 +10,6 @@ import problemComponents.Feature;
  * This class is the content and functionality required to add a new training/test example to the problem set.
  * 
  * @author luke newton
- * @version 2
  */
 public class AddExamplePanel extends ExampleModificationPanel {
 	//serializable ID

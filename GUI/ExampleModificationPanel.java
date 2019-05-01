@@ -8,7 +8,6 @@ import problemComponents.Feature;
  * Superclass for AddExamplePanel and EditExamplePanel to reduce code repetition
  * 
  * @author luke newton, madelyn krasnay
- * @version 3
  *
  */
 public abstract class ExampleModificationPanel extends UserInputPanel {

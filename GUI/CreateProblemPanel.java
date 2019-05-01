@@ -12,7 +12,6 @@ import problemComponents.Problem;
  * This class is the content and functionality required to create a new problem set.
  * 
  * @author luke newton, madelyn krasnay
- * @version 3
  *
  */
 public class CreateProblemPanel extends UserInputPanel {

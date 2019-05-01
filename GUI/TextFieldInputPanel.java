@@ -4,14 +4,16 @@ package GUI;
  * This class creates an input panel object that consists of a textbox.
  * These are used to get data from the user for an unknown number of attributes.
  *
- *@author Cameron Rushton, Madelyn Krasnay
- *@version 2.0
+ *@author Cameron Rushton, Madelyn Krasnay, Luke Newton
  */
 
-import javax.swing.*;
+
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
 
 public class TextFieldInputPanel extends InputPanel{
 	private static final long serialVersionUID = 4916333257931958033L;

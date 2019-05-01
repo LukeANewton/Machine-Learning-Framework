@@ -10,7 +10,6 @@ import problemComponents.Feature;
  * This class contains the content and functionality to edit a training/test example
  * 
  * @author luke newton, madelyn krasnay
- * @version 3
  *
  */
 public class EditExamplePanel extends ExampleModificationPanel {

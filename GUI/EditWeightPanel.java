@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
  * This class contains the contents and functionality to edit the weights of a problem set
  * 
  * @author luke newton, madelyn krasnay
- * @version 2
  */
 public class EditWeightPanel extends UserInputPanel {
 	//serialized ID

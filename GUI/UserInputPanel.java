@@ -17,7 +17,6 @@ import problemComponents.Problem;
  * Superclass for all Panels which ask the user for input
  * 
  * @author luke newton, Madelyn Krasnay
- * @version 3
  */
 public abstract class UserInputPanel extends JPanel{
 	//serialized ID
