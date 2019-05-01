@@ -120,7 +120,7 @@ public abstract class UserInputPanel extends JPanel{
 		controller.problem = problem;
 
 		//return to the main display of problem info
-		controller.setContentPane(new DisplayProblemContents(problem));
+		controller.setContentPane(new DisplayProblemContents(controller));
 		controller.pack();
 	}
 	

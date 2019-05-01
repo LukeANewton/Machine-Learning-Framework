@@ -27,15 +27,21 @@ public class DisplayProblemContents extends Container {
 	protected JList<ArrayList<Feature>> trainingExamples;
 	//list to display test examples
 	protected JList<ArrayList<Feature>> testExamples;
+	//the JFrame this will be displayed in
+	private Controller controller;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param problem problem set currently working with
 	 */
-	public DisplayProblemContents(Problem problem){
+	public DisplayProblemContents(Controller c){
 		super();
-		this.problem = problem;
+		problem = c.problem;
+		controller = c;
+		
+		controller.selectedTrainingExample = -1;
+		controller.selectedTestExample = -1;
 
 		createContent();
 	}
@@ -44,9 +50,9 @@ public class DisplayProblemContents extends Container {
 	private void createContent(){
 		//clear the controller
 		removeAll();
-		
+
 		setLayout(new GridLayout(2, 1));
-		
+
 		//create JList for training examples
 		JScrollPane scrollPane = new JScrollPane();
 		DefaultListModel<ArrayList<Feature>> features = new DefaultListModel<>();
@@ -93,7 +99,7 @@ public class DisplayProblemContents extends Container {
 	 */
 	protected void updateProblem(Problem problem){
 		this.problem = problem;
-		
+
 		DefaultListModel<ArrayList<Feature>> features = new DefaultListModel<>();
 		for(int i = 0; i < problem.getNumberOfTrainingExamples(); i++){
 			features.addElement(problem.getTrainingExample(i).getFields());
@@ -108,15 +114,8 @@ public class DisplayProblemContents extends Container {
 
 	/*listener for changing the selected training example*/
 	private class SelectTrainingExampleListener implements ListSelectionListener{
-		/*this warning is given in casting e.getSource() to JList<ArrayList<Feature>>.
-		 * This is suppressed because there is only on object using this listener and it is
-		 * of type JList<ArrayList<Feature>>, so there will never be a ClassCastException thrown here
-		 */
-		@SuppressWarnings("unchecked")
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			Controller controller = (Controller) SwingUtilities.windowForComponent((JList<ArrayList<Feature>>)e.getSource());
-			
 			if(problem.getNumberOfTrainingExamples() == 1){
 				return;
 			}else {
@@ -127,15 +126,8 @@ public class DisplayProblemContents extends Container {
 
 	/*listener for changing the selected test example*/
 	private class SelectTestExampleListener implements ListSelectionListener{
-		/*this warning is given in casting e.getSource() to JList<ArrayList<Feature>>.
-		 * This is supressed because there is only on object using this listener and it is
-		 * of type JList<ArrayList<Feature>>, so there will never be a ClassCastException thrown here
-		 */
-		@SuppressWarnings("unchecked")
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			Controller controller = (Controller) SwingUtilities.windowForComponent((JList<ArrayList<Feature>>)e.getSource());
-			
 			if(problem.getNumberOfTestExamples() == 1){
 				return;
 			}else {

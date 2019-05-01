@@ -346,7 +346,7 @@ public class PredictTestPanel extends Container {
 			controller.problem = problem;
 
 			//return to the main display of problem info
-			controller.setContentPane(new DisplayProblemContents(problem));
+			controller.setContentPane(new DisplayProblemContents(controller));
 			controller.pack();
 		}
 

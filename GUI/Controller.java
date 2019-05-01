@@ -35,6 +35,9 @@ public class Controller  extends JFrame{
 		super("machine learning framework");
 		problem = new Problem(1);
 		createdProblem = false;
+		//set selected examples to -1 to indicate no selection
+		selectedTrainingExample = -1;
+		selectedTestExample = -1;
 		//setup options for frame and create menu bar
 		makeFrame();
 	}
@@ -47,7 +50,7 @@ public class Controller  extends JFrame{
 	public static void main(String[] args) {
 		Controller controller = new Controller();
 		//default contents of the controller will be displaying the problem examples	
-		controller.setContentPane(new DisplayProblemContents(new Problem(1)));
+		controller.setContentPane(new DisplayProblemContents(controller));
 		controller.pack();
 	}
 
@@ -153,7 +156,7 @@ public class Controller  extends JFrame{
 
 			//cancel was selected in previous input dialog
 			if(result == null){
-				setContentPane(new DisplayProblemContents(problem));
+				setContentPane(new DisplayProblemContents(this));
 				return 0;
 			}
 
@@ -262,9 +265,13 @@ public class Controller  extends JFrame{
 	private class EditTrainingExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				//set contents to edit a training example
-				setContentPane(new EditExamplePanel(ExampleType.TrainingExample, problem, selectedTrainingExample));
-				pack();
+				if(selectedTrainingExample == -1){
+					JOptionPane.showMessageDialog(null, "Error: Please select a training example first");
+				}else{
+					//set contents to edit a training example
+					setContentPane(new EditExamplePanel(ExampleType.TrainingExample, problem, selectedTrainingExample));
+					pack();
+				}
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
@@ -275,9 +282,13 @@ public class Controller  extends JFrame{
 	private class EditTestExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				//set contents to edit a test example
-				setContentPane(new EditExamplePanel(ExampleType.TestExample, problem, selectedTestExample));
-				pack();
+				if(selectedTestExample == -1){
+					JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
+				}else{
+					//set contents to edit a test example
+					setContentPane(new EditExamplePanel(ExampleType.TestExample, problem, selectedTestExample));
+					pack();
+				}
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
@@ -287,12 +298,13 @@ public class Controller  extends JFrame{
 	/**Action listener to remove a training example from the problem set*/
 	private class RemoveTrainingExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if(createdProblem){
-				//set contents to remove a training example
-				problem.removeTrainingExample(selectedTrainingExample);
-				
-				//if the contetns of the problem is currently being displayed, it need to be updated to show import
-				if(getContentPane() instanceof DisplayProblemContents){
+			if(createdProblem){	
+				if(selectedTrainingExample == -1){
+					JOptionPane.showMessageDialog(null, "Error: Please select a training example first");
+				}else{
+					//set contents to remove a training example
+					problem.removeTrainingExample(selectedTrainingExample);
+					selectedTrainingExample = -1;
 					((DisplayProblemContents)getContentPane()).updateProblem(problem);
 					pack();
 				}
@@ -306,14 +318,15 @@ public class Controller  extends JFrame{
 	private class RemoveTestExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				//set contents to remove a test example
-				problem.removeTestExample(selectedTestExample);
-				
-				//if the contetns of the problem is currently being displayed, it need to be updated to show import
-				if(getContentPane() instanceof DisplayProblemContents){
+				if(selectedTestExample == -1){
+					JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
+				}else{
+					//set contents to remove a test example
+					problem.removeTestExample(selectedTestExample);
+					selectedTestExample = -1;
 					((DisplayProblemContents)getContentPane()).updateProblem(problem);
 					pack();
-				}
+				}		
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
@@ -324,9 +337,13 @@ public class Controller  extends JFrame{
 	private class PredictTestListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				//set contents to predict a test example output
-				setContentPane(new PredictTestPanel(problem, selectedTestExample));
-				pack();
+				if(selectedTestExample == -1){
+					JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
+				}else{
+					//set contents to predict a test example output
+					setContentPane(new PredictTestPanel(problem, selectedTestExample));
+					pack();
+				}	
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
