@@ -55,13 +55,13 @@ public class DisplayProblemContents extends Container {
 		}
 		trainingExamples = new JList<ArrayList<Feature>>(features);
 		DefaultListCellRenderer renderer =  (DefaultListCellRenderer)trainingExamples.getCellRenderer();  
-		renderer.setHorizontalAlignment(JLabel.CENTER);  
+		renderer.setHorizontalAlignment(JLabel.LEFT);  
 		trainingExamples.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		trainingExamples.addListSelectionListener(new SelectTrainingExampleListener());
 		scrollPane.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(10, 10, 10, 10),
 				BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
-						"Training Examples", TitledBorder.CENTER, TitledBorder.TOP)));
+						"Training Examples", TitledBorder.LEFT, TitledBorder.TOP)));
 		scrollPane.setViewportView(trainingExamples);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		add(scrollPane);
@@ -74,13 +74,13 @@ public class DisplayProblemContents extends Container {
 		}
 		testExamples = new JList<ArrayList<Feature>>(features);
 		renderer =  (DefaultListCellRenderer)testExamples.getCellRenderer();  
-		renderer.setHorizontalAlignment(JLabel.CENTER); 
+		renderer.setHorizontalAlignment(JLabel.LEFT); 
 		testExamples.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		testExamples.addListSelectionListener(new SelectTestExampleListener());
 		scrollPane.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(10, 10, 10, 10),
 				BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
-						"Test Examples", TitledBorder.CENTER, TitledBorder.TOP)));
+						"Test Examples", TitledBorder.LEFT, TitledBorder.TOP)));
 		scrollPane.setViewportView(testExamples);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		add(scrollPane);;

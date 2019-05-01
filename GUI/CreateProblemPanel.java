@@ -52,7 +52,6 @@ public class CreateProblemPanel extends UserInputPanel {
 		
 		//add specialized listener for this type of panel
 		doneButton.addActionListener(new AcceptFieldNamesListener());
-		cancelButton.addActionListener(new CancelFieldNamesListener());
 	}
 
 	/*listener to create new problem set*/
@@ -80,12 +79,4 @@ public class CreateProblemPanel extends UserInputPanel {
 			returnToDisplayScreen(e);
 		}
 	}
-	
-	/*listener to create new problem set*/
-	private class CancelFieldNamesListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
-			returnToDisplayScreen(e);
-		}
-	}
-
 }

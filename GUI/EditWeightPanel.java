@@ -50,7 +50,6 @@ public class EditWeightPanel extends UserInputPanel {
 		}
 		
 		doneButton.addActionListener(new AcceptWeightsListener());
-		cancelButton.addActionListener(new CancelWeightsListener());
 	}
 	
 	/*action listener for applying new weights to problem*/
@@ -85,13 +84,6 @@ public class EditWeightPanel extends UserInputPanel {
 				
 				returnToDisplayScreen(e);
 			}
-		}
-	}
-	
-	/*action listener for applying new weights to problem*/
-	private class CancelWeightsListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
-			returnToDisplayScreen(e);
 		}
 	}
 }

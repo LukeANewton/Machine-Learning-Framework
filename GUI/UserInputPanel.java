@@ -3,6 +3,7 @@ package GUI;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -89,6 +90,7 @@ public abstract class UserInputPanel extends JPanel{
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		add(cancelButton, c);
+		cancelButton.addActionListener(new CancelWeightsListener());
 		
 		
 		doneButton = new JButton("Done");
@@ -120,5 +122,12 @@ public abstract class UserInputPanel extends JPanel{
 		//return to the main display of problem info
 		controller.setContentPane(new DisplayProblemContents(problem));
 		controller.pack();
+	}
+	
+	/*action listener for applying new weights to problem*/
+	private class CancelWeightsListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			returnToDisplayScreen(e);
+		}
 	}
 }
