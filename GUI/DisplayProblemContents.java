@@ -1,13 +1,21 @@
 package GUI;
 
-import java.awt.*;
+
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import problemComponents.Feature;
 import problemComponents.Problem;
@@ -39,10 +47,12 @@ public class DisplayProblemContents extends Container {
 		super();
 		problem = c.problem;
 		controller = c;
-		
+
 		controller.selectedTrainingExample = -1;
 		controller.selectedTestExample = -1;
 
+		controller.setMenuBarEnabled(true);
+		
 		createContent();
 	}
 
@@ -50,20 +60,16 @@ public class DisplayProblemContents extends Container {
 	private void createContent(){
 		//clear the controller
 		removeAll();
-
 		setLayout(new GridLayout(2, 1));
 
 		//create JList for training examples
 		JScrollPane scrollPane = new JScrollPane();
 		DefaultListModel<ArrayList<Feature>> features = new DefaultListModel<>();
-		for(int i = 0; i < problem.getNumberOfTrainingExamples(); i++){
+		for(int i = 0; i < problem.getNumberOfTrainingExamples(); i++)
 			features.addElement(problem.getTrainingExample(i).getFields());
-		}
 		trainingExamples = new JList<ArrayList<Feature>>(features);
-		DefaultListCellRenderer renderer =  (DefaultListCellRenderer)trainingExamples.getCellRenderer();  
-		renderer.setHorizontalAlignment(JLabel.LEFT);  
 		trainingExamples.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		trainingExamples.addListSelectionListener(new SelectTrainingExampleListener());
+		trainingExamples.addMouseListener(new DeselectTrainingExampleListener());
 		scrollPane.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(10, 10, 10, 10),
 				BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
@@ -75,21 +81,18 @@ public class DisplayProblemContents extends Container {
 		//create JList for test examples
 		scrollPane = new JScrollPane();
 		features = new DefaultListModel<>();
-		for(int i = 0; i < problem.getNumberOfTestExamples(); i++){
+		for(int i = 0; i < problem.getNumberOfTestExamples(); i++)
 			features.addElement(problem.getTestExample(i).getFields());
-		}
 		testExamples = new JList<ArrayList<Feature>>(features);
-		renderer =  (DefaultListCellRenderer)testExamples.getCellRenderer();  
-		renderer.setHorizontalAlignment(JLabel.LEFT); 
 		testExamples.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		testExamples.addListSelectionListener(new SelectTestExampleListener());
+		testExamples.addMouseListener(new DeselectTestExampleListener());
 		scrollPane.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(10, 10, 10, 10),
 				BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
 						"Test Examples", TitledBorder.LEFT, TitledBorder.TOP)));
 		scrollPane.setViewportView(testExamples);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		add(scrollPane);;
+		add(scrollPane);
 	}
 
 	/**
@@ -101,37 +104,44 @@ public class DisplayProblemContents extends Container {
 		this.problem = problem;
 
 		DefaultListModel<ArrayList<Feature>> features = new DefaultListModel<>();
-		for(int i = 0; i < problem.getNumberOfTrainingExamples(); i++){
+		for(int i = 0; i < problem.getNumberOfTrainingExamples(); i++)
 			features.addElement(problem.getTrainingExample(i).getFields());
-		}
 		trainingExamples.setModel(features);
+
 		features = new DefaultListModel<>();
-		for(int i = 0; i < problem.getNumberOfTestExamples(); i++){
+		for(int i = 0; i < problem.getNumberOfTestExamples(); i++)
 			features.addElement(problem.getTestExample(i).getFields());
-		}
 		testExamples.setModel(features);
 	}
 
-	/*listener for changing the selected training example*/
-	private class SelectTrainingExampleListener implements ListSelectionListener{
-		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			if(problem.getNumberOfTrainingExamples() == 1){
-				return;
-			}else {
-				controller.selectedTrainingExample = trainingExamples.getSelectedIndex();
+	/*listener on Jlist for deselecting items*/
+	private class DeselectTrainingExampleListener extends MouseAdapter{
+		public void mousePressed(MouseEvent e){
+			JList<?> list = (JList<?>)e.getSource();
+			Controller c = (Controller)SwingUtilities.getRoot(list);
+			int index = list.locationToIndex(e.getPoint());
+
+			if(c.selectedTrainingExample == index){
+				list.clearSelection();
+				c.selectedTrainingExample = -1;
+			}else{
+				c.selectedTrainingExample = index;
 			}
 		}
 	}
 
-	/*listener for changing the selected test example*/
-	private class SelectTestExampleListener implements ListSelectionListener{
-		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			if(problem.getNumberOfTestExamples() == 1){
-				return;
-			}else {
-				controller.selectedTestExample = testExamples.getSelectedIndex();
+	/*listener on Jlist for deselecting items*/
+	private class DeselectTestExampleListener extends MouseAdapter{
+		public void mousePressed(MouseEvent e){
+			JList<?> list = (JList<?>)e.getSource();
+			Controller c = (Controller)SwingUtilities.getRoot(list);
+			int index = list.locationToIndex(e.getPoint());
+
+			if(c.selectedTestExample == index){
+				list.clearSelection();
+				c.selectedTestExample = -1;
+			}else{
+				c.selectedTestExample = index;
 			}
 		}
 	}

@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 import problemComponents.CompositeFeature;
 import problemComponents.Feature;
-import problemComponents.Problem;
 
 /**
  * Superclass for AddExamplePanel and EditExamplePanel to reduce code repetition
@@ -24,8 +23,8 @@ public abstract class ExampleModificationPanel extends UserInputPanel {
 	 * @param exampleType specifies whether we are adding a training example or test example
 	 * @param problem the problem set we are working with
 	 */
-	public ExampleModificationPanel(ExampleType exampleType, Problem problem){
-		super(problem);
+	public ExampleModificationPanel(ExampleType exampleType, Controller c){
+		super(c);
 		
 		this.exampleType = exampleType;
 	}

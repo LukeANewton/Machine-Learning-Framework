@@ -4,7 +4,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import problemComponents.Problem;
 
@@ -45,7 +52,16 @@ public class Controller  extends JFrame{
 	public void setCreatedProblem(boolean createdProblem) {
 		this.createdProblem = createdProblem;
 	}
-	
+
+	public void setMenuBarEnabled(boolean value){
+		//re enable all menu items
+		JMenuBar menuBar = getJMenuBar();
+		for(int i = 0; i < menuBar.getMenuCount(); i++){
+			for(int j = 0; j < menuBar.getMenu(i).getItemCount(); j++)
+				menuBar.getMenu(i).getItem(j).setEnabled(value);
+		}
+	}
+
 	/**main function to run program*/
 	public static void main(String[] args) {
 		Controller controller = new Controller();
@@ -180,7 +196,11 @@ public class Controller  extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			int numFeatures = askForNumberOfFeatures();
 			if(numFeatures > 0){
-				setContentPane(new CreateProblemPanel(numFeatures, problem));
+				JMenuItem source = (JMenuItem)e.getSource();
+				JPopupMenu parent = (JPopupMenu)source.getParent();
+				Controller c =  (Controller)SwingUtilities.getWindowAncestor(parent.getInvoker());
+				
+				setContentPane(new CreateProblemPanel(numFeatures, c));
 				pack();
 			}
 
@@ -191,8 +211,11 @@ public class Controller  extends JFrame{
 	private class EditWeightListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				//set contents to edit weights
-				setContentPane(new EditWeightPanel(problem));
+				JMenuItem source = (JMenuItem)e.getSource();
+				JPopupMenu parent = (JPopupMenu)source.getParent();
+				Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
+				
+				setContentPane(new EditWeightPanel(c));
 				pack();
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -239,8 +262,11 @@ public class Controller  extends JFrame{
 	private class AddTrainingExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				//set contents to add a new training example
-				setContentPane(new AddExamplePanel(ExampleType.TrainingExample, problem));
+				JMenuItem source = (JMenuItem)e.getSource();
+				JPopupMenu parent = (JPopupMenu)source.getParent();
+				Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
+
+				setContentPane(new AddExamplePanel(ExampleType.TrainingExample, c));
 				pack();
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -252,8 +278,11 @@ public class Controller  extends JFrame{
 	private class AddTestExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				//set contents to add a new test example
-				setContentPane(new AddExamplePanel(ExampleType.TestExample, problem));
+				JMenuItem source = (JMenuItem)e.getSource();
+				JPopupMenu parent = (JPopupMenu)source.getParent();
+				Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
+				
+				setContentPane(new AddExamplePanel(ExampleType.TestExample, c));
 				pack();	
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -268,8 +297,11 @@ public class Controller  extends JFrame{
 				if(selectedTrainingExample == -1){
 					JOptionPane.showMessageDialog(null, "Error: Please select a training example first");
 				}else{
-					//set contents to edit a training example
-					setContentPane(new EditExamplePanel(ExampleType.TrainingExample, problem, selectedTrainingExample));
+					JMenuItem source = (JMenuItem)e.getSource();
+					JPopupMenu parent = (JPopupMenu)source.getParent();
+					Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
+					
+					setContentPane(new EditExamplePanel(ExampleType.TrainingExample, c, selectedTrainingExample));
 					pack();
 				}
 			}else{
@@ -285,8 +317,11 @@ public class Controller  extends JFrame{
 				if(selectedTestExample == -1){
 					JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
 				}else{
-					//set contents to edit a test example
-					setContentPane(new EditExamplePanel(ExampleType.TestExample, problem, selectedTestExample));
+					JMenuItem source = (JMenuItem)e.getSource();
+					JPopupMenu parent = (JPopupMenu)source.getParent();
+					Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
+					
+					setContentPane(new EditExamplePanel(ExampleType.TestExample, c, selectedTestExample));
 					pack();
 				}
 			}else{
@@ -340,8 +375,11 @@ public class Controller  extends JFrame{
 				if(selectedTestExample == -1){
 					JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
 				}else{
-					//set contents to predict a test example output
-					setContentPane(new PredictTestPanel(problem, selectedTestExample));
+					JMenuItem source = (JMenuItem)e.getSource();
+					JPopupMenu parent = (JPopupMenu)source.getParent();
+					Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
+
+					setContentPane(new PredictTestPanel(c, selectedTestExample));
 					pack();
 				}	
 			}else{

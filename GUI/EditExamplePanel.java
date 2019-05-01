@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import problemComponents.Feature;
-import problemComponents.Problem;
 
 /**
  * This class contains the content and functionality to edit a training/test example
@@ -27,11 +26,11 @@ public class EditExamplePanel extends ExampleModificationPanel {
 	 * @param problem the problem set we are working with
 	 * @param exampleToEdit index of the example to edit
 	 */
-	public EditExamplePanel(ExampleType exampleType, Problem problem, int exampleToEdit){
-		super(exampleType, problem);
+	public EditExamplePanel(ExampleType exampleType, Controller c, int exampleToEdit){
+		super(exampleType, c);
 		this.exampleToEdit = exampleToEdit;
 
-		createContent(problem.getNumberOfFields());
+		createContent(c.problem.getNumberOfFields());
 	}
 
 	/**

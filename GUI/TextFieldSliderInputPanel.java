@@ -1,5 +1,9 @@
 package GUI;
 
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+
 /**
  * This class creates an input panel object that consists of a textbox and slider.
  * These are used to get data from the user for an unknown number of attributes.
@@ -8,7 +12,7 @@ package GUI;
  *@version 1.0
  */
 
-import javax.swing.*;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 

@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
-import problemComponents.Problem;
+
 
 /**
  * This class contains the contents and functionality to edit the weights of a problem set
@@ -23,10 +23,10 @@ public class EditWeightPanel extends UserInputPanel {
 	 * 
 	 * @param problem the problem set currently working with
 	 */
-	public EditWeightPanel(Problem problem){
-		super(problem);
+	public EditWeightPanel(Controller c){
+		super(c);
 		
-		createContent(problem.getNumberOfFields());
+		createContent(c.problem.getNumberOfFields());
 	}
 	
 	/**

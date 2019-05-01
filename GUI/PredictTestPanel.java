@@ -1,13 +1,24 @@
 package GUI;
 
-import java.awt.*;
+
+import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import problemComponents.CompositeFeature;
 import problemComponents.Feature;
@@ -46,10 +57,11 @@ public class PredictTestPanel extends Container {
 	 * @param problem the problem set currently working with
 	 * @param exampleToPredict index value of the test example to predict
 	 */
-	public PredictTestPanel(Problem problem, int exampleToPredict){
+	public PredictTestPanel(Controller c, int exampleToPredict){
 		super(); 
 		this.exampleToPredict = exampleToPredict;
-		this.problem = problem;
+		this.problem = c.problem;
+		c.setMenuBarEnabled(false);
 		distanceFunctionSelectionMap = new HashMap<>();
 
 		createContent();

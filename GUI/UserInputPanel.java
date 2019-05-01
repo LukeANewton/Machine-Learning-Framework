@@ -37,10 +37,11 @@ public abstract class UserInputPanel extends JPanel{
 	 * 
 	 * @param problem reference to the current problem being worked on
 	 */
-	public UserInputPanel(Problem problem){
+	public UserInputPanel(Controller c){
 		super();
 
-		this.problem = problem;
+		problem = c.problem;
+		c.setMenuBarEnabled(false);
 		panels = new ArrayList<TextFieldInputPanel>();
 	}
 

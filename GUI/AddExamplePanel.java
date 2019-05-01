@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import problemComponents.Feature;
-import problemComponents.Problem;
 
 /**
  * This class is the content and functionality required to add a new training/test example to the problem set.
@@ -23,10 +22,10 @@ public class AddExamplePanel extends ExampleModificationPanel {
 	 * @param exampleType specifies whether we are adding a training example or test example
 	 * @param problem the problem set we are working with
 	 */
-	public AddExamplePanel(ExampleType exampleType, Problem problem){
-		super(exampleType, problem);
+	public AddExamplePanel(ExampleType exampleType, Controller c){
+		super(exampleType, c);
 
-		createContent(problem.getNumberOfFields());
+		createContent(c.problem.getNumberOfFields());
 	}
 
 	/**

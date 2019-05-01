@@ -27,11 +27,10 @@ public class CreateProblemPanel extends UserInputPanel {
 	 * @param n number of features we want in a new problem
 	 * @param problem reference to the current problem being worked on
 	 */
-	public CreateProblemPanel(int n, Problem problem){
-		super(problem);
-		
+	public CreateProblemPanel(int n, Controller c){
+		super(c);
 		numberOfFeatures = n;
-		
+		c.setMenuBarEnabled(false);
 		createContent(n);
 	}
 
