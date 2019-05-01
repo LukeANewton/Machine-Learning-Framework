@@ -37,7 +37,7 @@ public class predictionTest {
 		fieldNames = new ArrayList<>(Arrays.asList("a", "b"));
 		weights = new double[]{100, 100};
 		
-		problem = new Problem(1, fieldNames);
+		problem = new Problem(2, fieldNames);
 		problem.setWeights(weights);
 	}
 	
@@ -74,7 +74,6 @@ public class predictionTest {
 	public void testSmallPredictionNumber(){
 		setSingleTestAndTrainingExamples("42");
 		Object result = Prediction.getPrediction(problem.getNumberOfTrainingExamples(), problem, 0);
-		
 		assertTrue(result.equals(42));
 	}
 	
@@ -128,7 +127,7 @@ public class predictionTest {
 		}
 		problem.setTrainingExamples(trainingExamples);
     	
-		testExamples = new ArrayList<>();;
+		testExamples = new ArrayList<>();
 		newPoint = new ArrayList<>();
     	newPoint.add(CompositeFeature.parseFeature("3"));
     	newPoint.add(CompositeFeature.parseFeature(""));

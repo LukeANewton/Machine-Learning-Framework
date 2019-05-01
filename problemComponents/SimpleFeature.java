@@ -131,5 +131,34 @@ public class SimpleFeature implements Feature {
 		//otherwise its a string
 		return new SimpleFeature(s, new StringEquals());
 	}
+
+	/* (non-Javadoc)
+	 * @see problemComponents.Feature#setDistanceFunction(simpleFeatureDistanceStrategies.SimpleDistanceStrategy, problemComponents.SimpleFeatureType)
+	 */
+	@Override
+	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction, SimpleFeatureType simpleFeatureType) {
+		switch(simpleFeatureType){
+		case STRING:
+			if(contents instanceof String)
+				this.distanceFunction = distanceFunction;
+			break;
+		case CHARACTER:
+			if(contents instanceof Character)
+				this.distanceFunction = distanceFunction;
+			break;
+		case INTEGER:
+			if(contents instanceof Integer && !(contents instanceof Double))
+				this.distanceFunction = distanceFunction;
+			break;
+		case DOUBLE:
+			if(contents instanceof Double)
+				this.distanceFunction = distanceFunction;
+		break;
+		default:
+			//do nothing otherwise
+			break;
+		}
+		
+	}
 	
 }

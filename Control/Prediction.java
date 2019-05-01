@@ -30,7 +30,7 @@ public class Prediction {
 		TestExample pointToPredict = problem.getTestExample(indexOfPointToPredict);
 		for(int i = 0; i < problem.getNumberOfTrainingExamples(); i++){
 			if(pointToPredict.equals(problem.getTrainingExample(i).toTestExample())){
-				return problem.getTrainingExample(i).getField(problem.getNumberOfFields()).getContents();
+				return problem.getTrainingExample(i).getField(problem.getNumberOfFields() - 1).getContents();
 			}
 		}
 		

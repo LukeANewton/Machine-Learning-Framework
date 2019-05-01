@@ -2,6 +2,8 @@ package problemComponents;
 
 import java.io.Serializable;
 
+import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
+
 /**
  * Interface for simple and composite features for Composite design pattern.
  * 
@@ -12,4 +14,6 @@ public interface Feature extends Serializable{
 	public Object getContents();
 	/*calculate the distaance between this feature and another */
 	public double calculateDistance(Feature otherFeature);
+	/*update the distance function of a feature*/
+	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction, SimpleFeatureType simpleFeatureType);
 }

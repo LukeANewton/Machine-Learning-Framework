@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 import exampleDistanceCombinationStrategies.EuclidianDistance;
 import exampleDistanceCombinationStrategies.ExampleDistanceStrategy;
+import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
 
 /**
  * Object containing all information on a prediction problem. Contains all test and training example, 
@@ -68,6 +69,18 @@ public class Problem implements Serializable{
 	public Problem(int numFields, ArrayList<String> fieldNames){
 		this(numFields);
 		this.fieldNames = fieldNames;
+	}
+	
+	/**
+	 * Constructor for a problem with specified field names and
+	 * no initial data points
+	 * 
+	 * @param numFields the number of fields in each data point
+	 * @param fieldNames collection of the name of each field in a data point in the order they appear
+	 */
+	public Problem(int numFields, ArrayList<String> fieldNames, double[] weights){
+		this(numFields, fieldNames);
+		this.weights = weights;
 	}
 	
 	/** return the prediction accuracy tracking object */
@@ -369,5 +382,26 @@ public class Problem implements Serializable{
 		
 		in.close();
 		fileIn.close();
+	}
+
+	/**
+	 * updates the distance function used for all simple features of a given type within the data set
+	 * 
+	 * @param simpleDistanceStrategy the new distance function to use
+	 * @param type the type of feature associated with the distance function
+	 */
+	public void setDistanceFunction(SimpleDistanceStrategy simpleDistanceStrategy, SimpleFeatureType type) {
+		for(int i = 0; i < getNumberOfTrainingExamples(); i++){
+			for(int j = 0; j < getNumberOfFields(); j++){
+				if(getTrainingExample(i).getField(j) != null)
+					getTrainingExample(i).getField(j).setDistanceFunction(simpleDistanceStrategy, type);
+			}
+		}for(int i = 0; i < getNumberOfTestExamples(); i++){
+			for(int j = 0; j < getNumberOfFields(); j++){
+				if(getTestExample(i).getField(j) != null)
+					getTestExample(i).getField(j).setDistanceFunction(simpleDistanceStrategy, type);
+			}
+		}
+		
 	}
 }

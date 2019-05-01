@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import compositeFeatureDistanceStrategies.CompositeDistanceStrategy;
 import compositeFeatureDistanceStrategies.EuclideanDistance;
+import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
 
 /**
  * Composite Features are features built out of other features. With simple features and the ability 
@@ -163,5 +164,15 @@ public class CompositeFeature implements Feature {
 	/** set the strategy used to compare features of this composition */
 	public void setDistanceFunction(CompositeDistanceStrategy distanceFunction) {
 		this.distanceStrategy = distanceFunction;
+	}
+
+	/* (non-Javadoc)
+	 * @see problemComponents.Feature#setDistanceFunction(simpleFeatureDistanceStrategies.SimpleDistanceStrategy, problemComponents.SimpleFeatureType)
+	 */
+	@Override
+	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction, SimpleFeatureType simpleFeatureType) {
+		for(int i = 0; i < contents.size(); i++){
+			contents.get(i).setDistanceFunction(distanceFunction, simpleFeatureType);
+		}
 	}
 }
