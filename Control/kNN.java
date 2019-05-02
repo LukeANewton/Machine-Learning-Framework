@@ -210,6 +210,7 @@ public class kNN {
 					distances[pointNum][fieldNum] = null;
 				//else, calculate distance using current feature's distance function
 				}else{
+					
 					distances[pointNum][fieldNum] = feature.calculateDistance(convertedExampleToPredict.getField(fieldNum));
 				}
 			}

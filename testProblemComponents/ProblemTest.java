@@ -210,7 +210,7 @@ public class ProblemTest {
     	newPoint.add(CompositeFeature.parseFeature("(15, 20)"));
     	newPoint.add(CompositeFeature.parseFeature("1000"));
     	newPoint.add(CompositeFeature.parseFeature("new"));
-    	newPoint.add(CompositeFeature.parseFeature("?"));
+    	newPoint.add(CompositeFeature.parseFeature(""));
     	problem.addTestExample(newPoint);
     	
     	problem.serializedExport();

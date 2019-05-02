@@ -426,7 +426,7 @@ public class PredictTestPanel extends Container {
 
 			//ask the user if they want to compare the predicted value against a known value
 			int result = JOptionPane.showConfirmDialog(null, "prediction result is " + prediction.toString() + ", do you want to compare against a known value?",
-					"prediction dialog box", JOptionPane.YES_NO_OPTION);
+					"prediction dialog box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 			/*if user says yes, get a value from them and update the accuracy*/
 			if(result == JOptionPane.YES_OPTION){
@@ -437,7 +437,7 @@ public class PredictTestPanel extends Container {
 
 				//get known ouput from user and parse
 				SimpleFeature knownOutput = SimpleFeature.parseSimpleFeature(
-						JOptionPane.showInputDialog(initPanel, "Enter known output value:")
+						JOptionPane.showInputDialog(initPanel, "Enter known output value:", "Known value", JOptionPane.PLAIN_MESSAGE)
 						);
 				//update accuracy
 				problem.updateAccuracy(prediction, knownOutput.getContents());
@@ -447,7 +447,7 @@ public class PredictTestPanel extends Container {
 
 			//ask the user if they want to replace the output of test example in problem with this prediction
 			result = JOptionPane.showConfirmDialog(null, "prediction result is " + prediction.toString() + ", do you want to overwrite \nthe example you predicted for to contain this result?",
-					"prediction dialog box", JOptionPane.YES_NO_OPTION);
+					"prediction dialog box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 			/*if user says yes, add that prediction to the test example*/
 			if(result == JOptionPane.YES_OPTION){
@@ -458,7 +458,6 @@ public class PredictTestPanel extends Container {
 				//replace the test example in the problem with updated one
 				problem.editTestExample(exampleToPredict, dataElements);
 			}
-
 			returnToDisplayContents();
 		}
 

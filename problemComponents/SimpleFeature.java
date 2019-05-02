@@ -58,6 +58,8 @@ public class SimpleFeature implements Feature {
 	
 	@Override
 	public String toString() {
+		if(contents == null)
+			return "?";
 		return contents.toString();
 	}
 
