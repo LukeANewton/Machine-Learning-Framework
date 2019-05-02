@@ -124,7 +124,7 @@ public abstract class UserInputPanel extends JPanel{
 		controller.pack();
 	}
 	
-	/*action listener for applying new weights to problem*/
+	/*action listener for cancelling operation*/
 	private class CancelWeightsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			returnToDisplayScreen(e);

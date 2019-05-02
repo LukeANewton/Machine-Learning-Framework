@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import compositeFeatureDistanceStrategies.CompositeDistanceStrategy;
 import exampleDistanceCombinationStrategies.EuclidianDistance;
 import exampleDistanceCombinationStrategies.ExampleDistanceStrategy;
 import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
@@ -390,7 +391,7 @@ public class Problem implements Serializable{
 	 * @param simpleDistanceStrategy the new distance function to use
 	 * @param type the type of feature associated with the distance function
 	 */
-	public void setDistanceFunction(SimpleDistanceStrategy simpleDistanceStrategy, SimpleFeatureType type) {
+	public void setSimpleDistanceFunction(SimpleDistanceStrategy simpleDistanceStrategy, SimpleFeatureType type) {
 		for(int i = 0; i < getNumberOfTrainingExamples(); i++){
 			for(int j = 0; j < getNumberOfFields(); j++){
 				if(getTrainingExample(i).getField(j) != null)
@@ -402,6 +403,33 @@ public class Problem implements Serializable{
 					getTestExample(i).getField(j).setDistanceFunction(simpleDistanceStrategy, type);
 			}
 		}
-		
+	}
+	
+	/**
+	 * updates the distance function used for all composite features of a given type within the data set
+	 * 
+	 * @param compositeDistanceStrategy the new distance function to use
+	 */
+	public void setCompositeDistanceFunction(CompositeDistanceStrategy compositeDistanceStrategy) {
+		for(int i = 0; i < getNumberOfTrainingExamples(); i++){
+			for(int j = 0; j < getNumberOfFields(); j++){
+				if(getTrainingExample(i).getField(j) instanceof CompositeFeature)
+					((CompositeFeature)getTrainingExample(i).getField(j)).setDistanceFunction(compositeDistanceStrategy);
+			}
+		}for(int i = 0; i < getNumberOfTestExamples(); i++){
+			for(int j = 0; j < getNumberOfFields(); j++){
+				if(getTestExample(i).getField(j) instanceof CompositeFeature)
+					((CompositeFeature)getTestExample(i).getField(j)).setDistanceFunction(compositeDistanceStrategy);
+			}
+		}
+	}
+	
+	/**
+	 * updates the distance function used for all composite features of a given type within the data set
+	 * 
+	 * @param compositeDistanceStrategy the new distance function to use
+	 */
+	public void setExampleDistanceFunction(ExampleDistanceStrategy exampleDistanceStrategy) {
+		this.exampleCombinationStrategy = exampleDistanceStrategy;
 	}
 }
