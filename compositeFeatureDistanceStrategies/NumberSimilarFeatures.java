@@ -1,6 +1,3 @@
-/**
- * 
- */
 package compositeFeatureDistanceStrategies;
 
 import java.util.ArrayList;
@@ -15,9 +12,7 @@ import problemComponents.Feature;
 public class NumberSimilarFeatures implements CompositeDistanceStrategy{
 	private static final long serialVersionUID = -5594911074602383353L;
 
-	/* (non-Javadoc)
-	 * @see compositeFeatureDistanceStrategies.CompositeDistanceStrategy#calculateDistance(problemComponents.CompositeFeature, problemComponents.CompositeFeature)
-	 */
+	/**calculates the distance between two composite features*/
 	@Override
 	public double calculateDistance(CompositeFeature feature1, CompositeFeature feature2) {
 		double distance = 0;
@@ -29,7 +24,6 @@ public class NumberSimilarFeatures implements CompositeDistanceStrategy{
 			if (features1.get(i).equals(features2.get(i)))
 				distance++;
 		}
-		
 		return distance;
 	}
 

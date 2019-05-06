@@ -1,6 +1,3 @@
-/**
- * 
- */
 package compositeFeatureDistanceStrategies;
 
 import java.util.ArrayList;
@@ -15,9 +12,7 @@ import problemComponents.Feature;
 public class ChebyshevDistance implements CompositeDistanceStrategy {
 	private static final long serialVersionUID = 5487324118631234054L;
 
-	/* (non-Javadoc)
-	 * @see compositeDistanceFunctions.CompositeDistanceFunction#calculateDistance(problemComponents.CompositeFeature, problemComponents.CompositeFeature)
-	 */
+	/**calculates the distance between two composite features*/
 	@Override
 	public double calculateDistance(CompositeFeature feature1, CompositeFeature feature2) {
 		double distance = 0;
@@ -30,7 +25,6 @@ public class ChebyshevDistance implements CompositeDistanceStrategy {
 			if(newDistance > distance)
 				distance = newDistance;
 		}
-		
 		return distance;
 	}
 

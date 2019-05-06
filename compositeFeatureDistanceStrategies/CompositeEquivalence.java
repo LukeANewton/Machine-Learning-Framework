@@ -1,6 +1,3 @@
-/**
- * 
- */
 package compositeFeatureDistanceStrategies;
 
 import problemComponents.CompositeFeature;
@@ -12,9 +9,7 @@ import problemComponents.CompositeFeature;
 public class CompositeEquivalence implements CompositeDistanceStrategy {
 	private static final long serialVersionUID = 4817886592858489018L;
 
-	/* (non-Javadoc)
-	 * @see compositeDistanceFunctions.CompositeDistanceFunction#calculateDistance(problemComponents.CompositeFeature, problemComponents.CompositeFeature)
-	 */
+	/**calculates the distance between two composite features*/
 	@Override
 	public double calculateDistance(CompositeFeature feature1, CompositeFeature feature2) {
 		if(feature1.equals(feature2))

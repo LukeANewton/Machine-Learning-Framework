@@ -1,6 +1,3 @@
-/**
- * 
- */
 package compositeFeatureDistanceStrategies;
 
 import java.util.ArrayList;
@@ -25,9 +22,8 @@ public class ManhattanDistance implements CompositeDistanceStrategy {
 		ArrayList<Feature> features2 = feature2.getContents();
 		int maxSize =  Math.min(features1.size(), features2.size());
 		
-		for(int i = 0; i < maxSize; i++){
+		for(int i = 0; i < maxSize; i++)
 			distance += features1.get(i).calculateDistance(features2.get(i));
-		}
 		
 		return distance;
 	}
