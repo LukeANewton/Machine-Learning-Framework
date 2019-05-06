@@ -51,7 +51,6 @@ public class PredictionConfigurePanel extends Container {
 	private HashMap<String, ExampleDistanceStrategy> exampleDistanceFunctionSelectionMap;
 	private MachineLearningFramework m;
 	
-	
 	/**
 	 * Constructor
 	 * 
@@ -368,6 +367,7 @@ public class PredictionConfigurePanel extends Container {
 				return;
 			}
 			
+			
 			//get the selected point distance function user specified
 			String selectedPointDistanceFunction = getSelectedButton(pointDistanceFunctionButtonGroup);
 			//if no button is selected, show error message
@@ -383,6 +383,7 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a character distance function to use");
 				return;
 			}
+			
 
 			//get the selected double distance function user specified
 			String selectedDoubleDistanceFunction = getSelectedButton(doubleDistanceFunctionButtonGroup);
@@ -391,6 +392,7 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a double distance function to use");
 				return;
 			}
+			
 
 			//get the selected integer distance function user specified
 			String selectedIntegerDistanceFunction = getSelectedButton(integerDistanceFunctionButtonGroup);
@@ -399,7 +401,7 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a integer distance function to use");
 				return;
 			}
-
+			
 			//get the selected String distance function user specified
 			String selectedStringDistanceFunction = getSelectedButton(stringDistanceFunctionButtonGroup);
 			//if no button is selected, show error message
@@ -410,13 +412,11 @@ public class PredictionConfigurePanel extends Container {
 
 			//set problem stategies to selected strategies
 			m.configurePrediction(k, exampleDistanceFunctionSelectionMap.get(selectedExampleDistanceFunction),
-					compositeDistanceFunctionSelectionMap.get(selectedPointDistanceFunction), 
-					simpleDistanceFunctionSelectionMap.get(selectedCharacterDistanceFunction),
-					simpleDistanceFunctionSelectionMap.get(selectedDoubleDistanceFunction),
-					simpleDistanceFunctionSelectionMap.get(selectedIntegerDistanceFunction),
-					simpleDistanceFunctionSelectionMap.get(selectedStringDistanceFunction)
-					);
+					compositeDistanceFunctionSelectionMap.get(selectedPointDistanceFunction), simpleDistanceFunctionSelectionMap.get(selectedCharacterDistanceFunction),
+					simpleDistanceFunctionSelectionMap.get(selectedDoubleDistanceFunction), simpleDistanceFunctionSelectionMap.get(selectedIntegerDistanceFunction),
+					simpleDistanceFunctionSelectionMap.get(selectedStringDistanceFunction));
 			
+			//return to main display
 			returnToDisplayContents();
 			m.setConfigured(true);
 		}

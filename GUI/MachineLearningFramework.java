@@ -49,6 +49,36 @@ public class MachineLearningFramework  extends JFrame{
 	private boolean configuredPrediction;
 	//the number of nearest neighbors to find in prediction
 	private int k;
+	private ExampleDistanceStrategy exStrat;
+	private CompositeDistanceStrategy compStrat;
+	private SimpleDistanceStrategy charStrat;
+	private SimpleDistanceStrategy stringStrat;
+	private SimpleDistanceStrategy intStrat;
+	private SimpleDistanceStrategy doubleStrat;
+
+	public void setExampleStrategy(ExampleDistanceStrategy exStrat) {
+		this.exStrat = exStrat;
+	}
+
+	public void setCompositeStrategy(CompositeDistanceStrategy compStrat) {
+		this.compStrat = compStrat;
+	}
+
+	public void setCharacterStrategy(SimpleDistanceStrategy charStrat) {
+		this.charStrat = charStrat;
+	}
+
+	public void setStringStrategy(SimpleDistanceStrategy stringStrat) {
+		this.stringStrat = stringStrat;
+	}
+
+	public void setIntegerStrategy(SimpleDistanceStrategy intStrat) {
+		this.intStrat = intStrat;
+	}
+
+	public void setDoubleStrategy(SimpleDistanceStrategy doubleStrat) {
+		this.doubleStrat = doubleStrat;
+	}
 
 	/**Constructor*/
 	public MachineLearningFramework(){
@@ -81,7 +111,12 @@ public class MachineLearningFramework  extends JFrame{
 			SimpleDistanceStrategy charStrat, SimpleDistanceStrategy doubleStrat, SimpleDistanceStrategy intStrat, 
 			SimpleDistanceStrategy stringStrat){
 		this.k = k;
-		problem.setStrategies(exStrat, compStrat, charStrat, doubleStrat, intStrat, stringStrat);
+		this.exStrat = exStrat;
+		this.compStrat = compStrat;
+		this.charStrat = charStrat;
+		this.doubleStrat = doubleStrat;
+		this.intStrat = intStrat;
+		this.stringStrat = stringStrat;
 	}
 
 	public void setMenuBarEnabled(boolean value){
@@ -272,8 +307,12 @@ public class MachineLearningFramework  extends JFrame{
 					MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
 
 					int result = jfc.showSaveDialog(m);
-					if(result == JFileChooser.APPROVE_OPTION)
+					if(result == JFileChooser.APPROVE_OPTION){
+						//ensure all strategies are updated
+						problem.setStrategies(exStrat, compStrat, charStrat, doubleStrat, intStrat, stringStrat);
+						//save problem
 						problem.serializedExport(jfc.getSelectedFile().getAbsolutePath());
+					}
 				} catch (Exception e1) {
 					System.out.println("Export failed");
 				}
@@ -445,6 +484,9 @@ public class MachineLearningFramework  extends JFrame{
 					if(selectedTestExample == -1){
 						JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
 					}else{
+						//ensure all examples have the same distance metrics
+						problem.setStrategies(exStrat, compStrat, charStrat, doubleStrat, intStrat, stringStrat);
+						
 						//make prediction
 						Object prediction = Prediction.getPrediction(k, problem, selectedTestExample);
 
