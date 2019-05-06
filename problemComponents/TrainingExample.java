@@ -21,6 +21,11 @@ public class TrainingExample extends Example {
 		fields = features;
 	}
 	
+	public TestExample toTestExample(){
+		return new TestExample(this.fields);
+	}
+	
+	/**equals override*/
 	@Override
 	public boolean equals(Object o){
 		if(!(o instanceof TrainingExample))
@@ -38,6 +43,7 @@ public class TrainingExample extends Example {
 		return true;
 	}
 	
+	/**toString override*/
 	@Override
 	public String toString(){
 		StringBuffer buf = new StringBuffer();
@@ -49,9 +55,5 @@ public class TrainingExample extends Example {
 		buf.append("]");
 		
 		return buf.toString();
-	}
-	
-	public TestExample toTestExample(){
-		return new TestExample(this.fields);
 	}
 }

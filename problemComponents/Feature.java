@@ -12,8 +12,8 @@ import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
 public interface Feature extends Serializable{
 	/** return the contents of this feature */
 	public Object getContents();
-	/*calculate the distaance between this feature and another */
+	/**calculate the distaance between this feature and another */
 	public double calculateDistance(Feature otherFeature);
-	/*update the distance function of a feature*/
+	/**update the distance function of a feature*/
 	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction, SimpleFeatureType simpleFeatureType);
 }

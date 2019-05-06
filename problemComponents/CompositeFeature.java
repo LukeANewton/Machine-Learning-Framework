@@ -25,12 +25,12 @@ public class CompositeFeature implements Feature {
 	//the strategy used to compare this feature to others
 	private CompositeDistanceStrategy distanceStrategy;
 	
-	/*Constructor for an empty Composite Feature*/
+	/**Constructor for an empty Composite Feature*/
 	public CompositeFeature(){
 		contents = new ArrayList<>();
 	}
 	
-	/* 
+	/** 
 	 * Constructor
 	 * 
 	 * @param features a list of the sub-features which make up a composite feature
@@ -41,14 +41,54 @@ public class CompositeFeature implements Feature {
 		distanceStrategy = strategy;
 	}
 	
-	/* (non-Javadoc)
-	 * @see problemComponents.Feature#calculateDistance(java.lang.Object)
-	 */
+	/** return the set of features contained in this feature */
+	@Override
+	public ArrayList<Feature> getContents() {
+		return contents;
+	}
+	
+	/** set contents of this feature to a set of features */
+	public void setContents(ArrayList<Feature> contents) {
+		this.contents = contents;
+	}
+	
+	/** returns the feature at a specified index value, null if invalid range*/
+	public Feature getFeature(int i) {
+		if(i < contents.size() && i >= 0)
+			return contents.get(i);
+		return null;
+	}
+	
+	/** add another feature to the contents of this feature */
+	public void addFeature(Feature feature){
+		contents.add(feature);
+	}
+	
+	/** return the strategy used to compare features of this composition */
+	public CompositeDistanceStrategy getDistanceFunction() {
+		return distanceStrategy;
+	}
+	
+	/** set the strategy used to compare features of this composition */
+	public void setDistanceFunction(CompositeDistanceStrategy distanceFunction) {
+		this.distanceStrategy = distanceFunction;
+	}
+	
+	/**update the distance function of a feature*/
+	@Override
+	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction, SimpleFeatureType simpleFeatureType) {
+		for(int i = 0; i < contents.size(); i++){
+			contents.get(i).setDistanceFunction(distanceFunction, simpleFeatureType);
+		}
+	}
+	
+	/**calculate the distaance between this feature and another*/
 	@Override
 	public double calculateDistance(Feature otherFeature){
 		return distanceStrategy.calculateDistance(this, (CompositeFeature)otherFeature);
 	}
 	
+	/**equaks override*/
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -67,29 +107,15 @@ public class CompositeFeature implements Feature {
 		return true;
 	}
 
+	/**toString override*/
 	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("(" + contents.get(0));
-		
 		for(int i = 1; i < contents.size(); i++)
 			buf.append("," + contents.get(i));
-		
 		buf.append(")");
-		
 		return buf.toString();
-	}
-	
-	/** returns the feature at a specified index value, null if invalid range*/
-	public Feature getFeature(int i) {
-		if(i < contents.size() && i >= 0)
-			return contents.get(i);
-		return null;
-	}
-	
-	/** add another feature to the contents of this feature */
-	public void addFeature(Feature feature){
-		contents.add(feature);
 	}
 	
 	/**
@@ -115,7 +141,6 @@ public class CompositeFeature implements Feature {
 			subFeatures.add("");
 			int inANestedFeature = 0;
 			for(int i = 0 ,j = 0; i < sNoBrackets.length(); i++){
-
 				//go to next substring on commas and when not in a nested composite feature
 				if(sNoBrackets.charAt(i) == ',' && inANestedFeature == 0){
 					j++;
@@ -142,37 +167,6 @@ public class CompositeFeature implements Feature {
 		} else{
 			//not enclosed in round brackets, should be a simple feature
 			return SimpleFeature.parseSimpleFeature(s);
-		}
-	}
-	
-	/** return the set of features contained in this feature */
-	@Override
-	public ArrayList<Feature> getContents() {
-		return contents;
-	}
-	
-	/** set contents of this feature to a set of features */
-	public void setContents(ArrayList<Feature> contents) {
-		this.contents = contents;
-	}
-	
-	/** return the strategy used to compare features of this composition */
-	public CompositeDistanceStrategy getDistanceFunction() {
-		return distanceStrategy;
-	}
-	
-	/** set the strategy used to compare features of this composition */
-	public void setDistanceFunction(CompositeDistanceStrategy distanceFunction) {
-		this.distanceStrategy = distanceFunction;
-	}
-
-	/* (non-Javadoc)
-	 * @see problemComponents.Feature#setDistanceFunction(simpleFeatureDistanceStrategies.SimpleDistanceStrategy, problemComponents.SimpleFeatureType)
-	 */
-	@Override
-	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction, SimpleFeatureType simpleFeatureType) {
-		for(int i = 0; i < contents.size(); i++){
-			contents.get(i).setDistanceFunction(distanceFunction, simpleFeatureType);
 		}
 	}
 }

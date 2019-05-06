@@ -56,18 +56,6 @@ public class SimpleFeature implements Feature {
 		return distanceFunction.calculateDistance(this.contents, otherFeature.getContents());
 	}
 	
-	@Override
-	public String toString() {
-		if(contents == null)
-			return "?";
-		return contents.toString();
-	}
-
-	@Override
-	public boolean equals(Object o){
-		return contents.equals(((Feature) o).getContents());
-	}
-
 	/* (non-Javadoc)
 	 * @see problemComponents.Feature#getContents()
 	 */
@@ -89,6 +77,46 @@ public class SimpleFeature implements Feature {
 	/** update the strategy used to compare two features of this contents type */
 	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction) {
 		this.distanceFunction = distanceFunction;
+	}
+	
+	/**update the distance function of a feature*/
+	@Override
+	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction, SimpleFeatureType simpleFeatureType) {
+		switch(simpleFeatureType){
+		case STRING:
+			if(contents instanceof String)
+				this.distanceFunction = distanceFunction;
+			break;
+		case CHARACTER:
+			if(contents instanceof Character)
+				this.distanceFunction = distanceFunction;
+			break;
+		case INTEGER:
+			if(contents instanceof Integer && !(contents instanceof Double))
+				this.distanceFunction = distanceFunction;
+			break;
+		case DOUBLE:
+			if(contents instanceof Double)
+				this.distanceFunction = distanceFunction;
+		break;
+		default:
+			//do nothing otherwise
+			break;
+		}	
+	}
+	
+	/**toString override*/
+	@Override
+	public String toString() {
+		if(contents == null)
+			return "?";
+		return contents.toString();
+	}
+
+	/**equals override*/
+	@Override
+	public boolean equals(Object o){
+		return contents.equals(((Feature) o).getContents());
 	}
 	
 	/**
@@ -133,34 +161,4 @@ public class SimpleFeature implements Feature {
 		//otherwise its a string
 		return new SimpleFeature(s, new StringEquals());
 	}
-
-	/* (non-Javadoc)
-	 * @see problemComponents.Feature#setDistanceFunction(simpleFeatureDistanceStrategies.SimpleDistanceStrategy, problemComponents.SimpleFeatureType)
-	 */
-	@Override
-	public void setDistanceFunction(SimpleDistanceStrategy distanceFunction, SimpleFeatureType simpleFeatureType) {
-		switch(simpleFeatureType){
-		case STRING:
-			if(contents instanceof String)
-				this.distanceFunction = distanceFunction;
-			break;
-		case CHARACTER:
-			if(contents instanceof Character)
-				this.distanceFunction = distanceFunction;
-			break;
-		case INTEGER:
-			if(contents instanceof Integer && !(contents instanceof Double))
-				this.distanceFunction = distanceFunction;
-			break;
-		case DOUBLE:
-			if(contents instanceof Double)
-				this.distanceFunction = distanceFunction;
-		break;
-		default:
-			//do nothing otherwise
-			break;
-		}
-		
-	}
-	
 }

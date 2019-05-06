@@ -42,7 +42,27 @@ public class TestExample extends Example {
 	public TestExample(ArrayList<Feature> knownFeatures){
 		this(knownFeatures, knownFeatures.size() - 1);
 	}
+	
+	/** returns the unknown feature value in this TestExample */
+	public Feature getUnknownFeature() {
+		return unknownFeature;
+	}
 
+	/** Update the unknown feature value in this TestExample */
+	public void setUnknownFeature(Feature unknownFeature) {
+		this.unknownFeature = unknownFeature;
+	}
+
+	/** return the position of the unknown feature in this TestExample */
+	public int getUnknownFeaturePosition() {
+		return unknownFeaturePosition;
+	}
+
+	/**Update the position of the unknown feature in this TestExample */
+	public void setUnknownFeaturePosition(int unknownFeaturePosition) {
+		this.unknownFeaturePosition = unknownFeaturePosition;
+	}
+	
 	/** 
 	 * Converts this TestExample into a TrainingExample with the unknwon feautre
 	 * inserted appropriately into the feature collection.
@@ -50,15 +70,16 @@ public class TestExample extends Example {
 	 * @return a TrainingExample with all known features and unknown feautre in one collection
 	 */
 	public TrainingExample toTrainingExample(){
-		ArrayList<Feature> features = fields;
-		return new TrainingExample(features);
+		return new TrainingExample(this.fields);
 	}
 	
+	/**toString override*/
 	@Override
 	public String toString(){
 		return this.toTrainingExample().toString();
 	}
 	
+	/**equals override*/
 	@Override
 	public boolean equals(Object o){
 		if(!(o instanceof TestExample))
@@ -74,25 +95,5 @@ public class TestExample extends Example {
 				return false;
 		}
 		return true;
-	}
-	
-	/** returns the unknown feature value in this TestExample */
-	public Feature getUnknownFeature() {
-		return unknownFeature;
-	}
-
-	/** Update the unknown feature value in this TestExample */
-	public void setUnknownFeature(Feature unknownFeature) {
-		this.unknownFeature = unknownFeature;
-	}
-
-	/* return the position of the unknown feature in this TestExample */
-	public int getUnknownFeaturePosition() {
-		return unknownFeaturePosition;
-	}
-
-	/*Update the position of the unknown feature in this TestExample */
-	public void setUnknownFeaturePosition(int unknownFeaturePosition) {
-		this.unknownFeaturePosition = unknownFeaturePosition;
 	}
 }

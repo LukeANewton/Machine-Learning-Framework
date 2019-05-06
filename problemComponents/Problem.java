@@ -17,7 +17,7 @@ import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
 
 /**
  * Object containing all information on a prediction problem. Contains all test and training example, 
- * field names, weightings for fields, prediction accuracy values, and strategies for combining exaples
+ * field names, weightings for fields, prediction accuracy values, and strategies for combining examples
  * for prediction.
  * 
  * This class has methods for accessing and editing each of the above fields, as well as methods for
@@ -42,8 +42,6 @@ public class Problem implements Serializable{
 	private ArrayList<TrainingExample> trainingExamples;
 	//strategy used to combine the distances for each field in a training example
 	private ExampleDistanceStrategy exampleCombinationStrategy;
-	//file name of the file used to save/load a probkem from
-	private static final String FILENAMESERIALIZED = "problemSerialized.txt";
 	
 	/**
 	 * Constructor for a generic problem
@@ -78,21 +76,11 @@ public class Problem implements Serializable{
 	 * 
 	 * @param numFields the number of fields in each data point
 	 * @param fieldNames collection of the name of each field in a data point in the order they appear
+	 * @param weights collection of weghtings for the importance of each field
 	 */
 	public Problem(int numFields, ArrayList<String> fieldNames, double[] weights){
 		this(numFields, fieldNames);
 		this.weights = weights;
-	}
-	
-	public void setStrategies(ExampleDistanceStrategy exStrat, CompositeDistanceStrategy compStrat,
-			SimpleDistanceStrategy charStrat, SimpleDistanceStrategy doubleStrat, SimpleDistanceStrategy intStrat, 
-			SimpleDistanceStrategy stringStrat){
-		setExampleDistanceFunction(exStrat);
-		setCompositeDistanceFunction(compStrat);
-		setSimpleDistanceFunction(charStrat, SimpleFeatureType.CHARACTER);
-		setSimpleDistanceFunction(stringStrat, SimpleFeatureType.STRING);
-		setSimpleDistanceFunction(intStrat, SimpleFeatureType.INTEGER);
-		setSimpleDistanceFunction(doubleStrat, SimpleFeatureType.DOUBLE);
 	}
 	
 	/** return the prediction accuracy tracking object */
@@ -159,9 +147,7 @@ public class Problem implements Serializable{
 		this.weights = weights;
 	}
 	
-	/**
-	 * Returns the names of every field in the DataSet in an ArrayList
-	 */
+	/** Returns the names of every field in the DataSet in an ArrayList*/
 	public ArrayList<String> getFieldNames(){
 		return fieldNames;
 	}
@@ -193,8 +179,8 @@ public class Problem implements Serializable{
 		return numberOfFields;
 	}
 
-	/**sets the problem to havve examples with n attributes/exmaples*/
-	public void setNumberOfAttributes(int n){
+	/**sets the problem to have examples with n features*/
+	public void setNumberOfFields(int n){
 		numberOfFields = n;
 	}
 
@@ -228,16 +214,6 @@ public class Problem implements Serializable{
 		trainingExamples.add(new TrainingExample(dataElements));
 	}
 	
-	/**edit a training example at index n in the collection*/
-	public void editTrainingExample(int n, ArrayList<Feature> dataElements){
-		trainingExamples.set(n, new TrainingExample(dataElements));
-	}
-	
-	/**edit a test example at index n in the collection*/
-	public void editTestExample(int n, ArrayList<Feature> dataElements){
-		testExamples.set(n, new TestExample(dataElements));
-	}
-
 	/**add a test example by passing an array of features*/
 	public void addTestExample(Feature... dataElements){
 		testExamples.add(new TestExample(new ArrayList<Feature>(Arrays.asList(dataElements))));
@@ -248,121 +224,26 @@ public class Problem implements Serializable{
 		testExamples.add(new TestExample(dataElements));
 	}
 	
+	/**edit a training example at index n in the collection*/
+	public void editTrainingExample(int n, ArrayList<Feature> dataElements){
+		trainingExamples.set(n, new TrainingExample(dataElements));
+	}
+	
+	/**edit a test example at index n in the collection*/
+	public void editTestExample(int n, ArrayList<Feature> dataElements){
+		testExamples.set(n, new TestExample(dataElements));
+	}
+
+	/**returns the strategy used to combine distances of all features in an example*/
 	public ExampleDistanceStrategy getExampleCombinationStrategy() {
 		return exampleCombinationStrategy;
 	}
 
+	/**set the strategy used to combine feature distances to the passed strategy*/
 	public void setExampleCombinationStrategy(ExampleDistanceStrategy exampleCombinationStrategy) {
 		this.exampleCombinationStrategy = exampleCombinationStrategy;
 	}
 	
-	/**to string override*/
-	@Override
-	public String toString(){
-		String s = "";
-
-		s += "Training Exmaples:\n";
-		s += trainingExamples.toString();
-
-		s += "\n\nTest Exmaples:\n";
-		s += testExamples.toString();
-
-		s += "\n\nfieldNames:\n";
-		for(int i = 0; i < fieldNames.size(); i++){
-			s += fieldNames.get(i);
-			if(i < fieldNames.size() - 1)
-				s += ", ";
-		}
-
-		s += "\n\nweights:\n";
-		for(int i = 0; i < weights.length; i++){
-			s += weights[i];
-			if(i < weights.length - 1)
-				s += ", ";
-		}
-
-		return s;
-	}
-	
-	public boolean equals(Problem anotherProblem){
-		return trainingExamples.equals(anotherProblem.getTrainingExamples()) &&
-				testExamples.equals(anotherProblem.getTestExamples()) &&
-				fieldNames.equals(anotherProblem.getFieldNames()) &&
-				weights.equals(anotherProblem.getWeights()) &&
-				numberOfFields == anotherProblem.getNumberOfFields();
-	}
-	
-	/**
-	 * export problem set to file
-	 * 
-	 * @throws IOException
-	 */
-	public void serializedExport() throws IOException {
-		serializedExport(FILENAMESERIALIZED);
-	}
-	
-	/**
-	 * export problem set to file at a specified path
-	 * 
-	 * @throws IOException
-	 */
-	public void serializedExport(String fieldName) throws IOException {
-		FileOutputStream fileOut = null;
-		try {
-			fileOut = new FileOutputStream(fieldName);
-		} catch (FileNotFoundException e1) {
-			System.out.println("pathname not accessable");
-			System.exit(0);
-		}
-		
-		ObjectOutputStream out;
-		out = new ObjectOutputStream(fileOut);
-		
-		out.writeObject(this);
-		out.close();
-		fileOut.close();
-	}
-	
-	/**
-	 * import serialized problem set
-	 * 
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	public void serializedImport() throws IOException, ClassNotFoundException {
-		serializedImport(FILENAMESERIALIZED);
-	}
-	
-	/**
-	 * import serialized problem set from a specified path
-	 * 
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	public void serializedImport(String fileName) throws IOException, ClassNotFoundException {
-		FileInputStream fileIn = null;
-		try {
-			fileIn = new FileInputStream(fileName);
-		} catch (FileNotFoundException e1) {
-			System.out.println("file not found");
-			System.exit(0);
-		}
-		
-		ObjectInputStream in = new ObjectInputStream(fileIn);
-		
-		Problem newProblem = (Problem)in.readObject();
-		
-		trainingExamples = newProblem.getTrainingExamples();
-		testExamples = newProblem.getTestExamples();
-		fieldNames = newProblem.getFieldNames();
-		weights = newProblem.getWeights();
-		predictionError = newProblem.getPredictionError();
-		numberOfFields = newProblem.getNumberOfFields();
-		
-		in.close();
-		fileIn.close();
-	}
-
 	/**
 	 * updates the distance function used for all simple features of a given type within the data set
 	 * 
@@ -409,5 +290,115 @@ public class Problem implements Serializable{
 	 */
 	public void setExampleDistanceFunction(ExampleDistanceStrategy exampleDistanceStrategy) {
 		this.exampleCombinationStrategy = exampleDistanceStrategy;
+	}
+	
+	/**
+	 * sets the distance metrics for all data points in the problem set to the passed strategies
+	 * 
+	 * @param exStrat the strategy for combining distances of examples
+	 * @param compStrat the strategy used for combining distances in a composite features
+	 * @param charStrat the strategy used to compare characters
+	 * @param doubleStrat the strategy used to compare doubles
+	 * @param intStrat the strategy used to comare integers
+	 * @param stringStrat the strategy used to compare strings
+	 */
+	public void setStrategies(ExampleDistanceStrategy exStrat, CompositeDistanceStrategy compStrat,
+			SimpleDistanceStrategy charStrat, SimpleDistanceStrategy doubleStrat, SimpleDistanceStrategy intStrat, 
+			SimpleDistanceStrategy stringStrat){
+		setExampleDistanceFunction(exStrat);
+		setCompositeDistanceFunction(compStrat);
+		setSimpleDistanceFunction(charStrat, SimpleFeatureType.CHARACTER);
+		setSimpleDistanceFunction(stringStrat, SimpleFeatureType.STRING);
+		setSimpleDistanceFunction(intStrat, SimpleFeatureType.INTEGER);
+		setSimpleDistanceFunction(doubleStrat, SimpleFeatureType.DOUBLE);
+	}
+	
+	/**toString override*/
+	@Override
+	public String toString(){
+		StringBuffer s = new StringBuffer();
+		int numFields = fieldNames.size();
+		
+		s.append("Training Exmaples:\n");
+		s.append(trainingExamples.toString());
+		
+		s.append("\n\nTest Exmaples:\n");
+		s.append( testExamples.toString());
+		
+		s.append("\n\nfieldNames:\n");
+		for(int i = 0; i < numFields; i++){
+			s.append(fieldNames.get(i));
+			if(i < numFields - 1)
+				s.append(", ");
+		}
+		
+		s.append("\n\nweights:\n");
+		for(int i = 0; i < weights.length; i++){
+			s.append(weights[i]);
+			if(i < weights.length - 1)
+				s.append(", ");
+		}
+		return s.toString();
+	}
+	
+	/**equals override*/
+	public boolean equals(Problem anotherProblem){
+		return trainingExamples.equals(anotherProblem.getTrainingExamples()) &&
+				testExamples.equals(anotherProblem.getTestExamples()) &&
+				fieldNames.equals(anotherProblem.getFieldNames()) &&
+				weights.equals(anotherProblem.getWeights()) &&
+				numberOfFields == anotherProblem.getNumberOfFields();
+	}
+	
+	/**
+	 * export problem set to file at a specified path
+	 * 
+	 * @throws IOException
+	 */
+	public void serializedExport(String fieldName) throws IOException {
+		FileOutputStream fileOut = null;
+		try {
+			fileOut = new FileOutputStream(fieldName);
+		} catch (FileNotFoundException e1) {
+			System.out.println("pathname not accessable");
+			System.exit(0);
+		}
+		
+		ObjectOutputStream out;
+		out = new ObjectOutputStream(fileOut);
+		
+		out.writeObject(this);
+		out.close();
+		fileOut.close();
+	}
+	
+	/**
+	 * import serialized problem set from a specified path
+	 * 
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public void serializedImport(String fileName) throws IOException, ClassNotFoundException {
+		FileInputStream fileIn = null;
+		try {
+			fileIn = new FileInputStream(fileName);
+		} catch (FileNotFoundException e1) {
+			System.out.println("file not found");
+			System.exit(0);
+		}
+		
+		ObjectInputStream in = new ObjectInputStream(fileIn);
+		
+		Problem newProblem = (Problem)in.readObject();
+		
+		trainingExamples = newProblem.getTrainingExamples();
+		testExamples = newProblem.getTestExamples();
+		fieldNames = newProblem.getFieldNames();
+		weights = newProblem.getWeights();
+		predictionError = newProblem.getPredictionError();
+		numberOfFields = newProblem.getNumberOfFields();
+		
+		in.close();
+		fileIn.close();
 	}
 }

@@ -11,20 +11,20 @@ import java.io.Serializable;
  */
 public class PredictionError implements Serializable{
 	private static final long serialVersionUID = 4313676483047829378L;
-	//the average accuracy of predictions
-	private double accuracy;
 	//number of predictions made
 	private int numberOfPredictions;
+	//number of correct predictions
+	private int numberOfCorrectPredicitons;
 	
 	/**Constructor*/
 	public PredictionError(){
-		accuracy = 0;
 		numberOfPredictions = 0;
+		numberOfCorrectPredicitons = 0;
 	}
 
 	/**returns the accuracy of the predictions we have been making so far*/
 	public double getAccuracy() {
-		return accuracy;
+		return ((double)numberOfCorrectPredicitons)/numberOfPredictions;
 	}
 	
 	/**
@@ -38,17 +38,9 @@ public class PredictionError implements Serializable{
 	 * @return the updated accuracy of our prediction model
 	 */
 	public double updateAccuracy(Object programPrediction, Object knownPrediction){
-		/*update an average - generic algorithm*/
-		//multiply by the number of predictions to get sum of individual equalities
-		accuracy *= numberOfPredictions;
-		//update sum of equalities - if they are equal, accuracy of THIS prediction is 1, add to sum
 		if(programPrediction.equals(knownPrediction))
-			accuracy++;
-		//update number of predictions
+			numberOfCorrectPredicitons++;
 		numberOfPredictions++;
-		//re-divide by updated number of predictions
-		accuracy /= numberOfPredictions;
-		//Return new accuracy average
-		return accuracy;
+		return getAccuracy();
 	}
 }

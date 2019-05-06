@@ -27,12 +27,12 @@ public abstract class Example implements Serializable{
 		return fields.get(i);
 	}
 	
-	/* returns the number of fields within this data point */
+	/** returns the number of fields within this data point */
 	public int getNumberOfFields(){
 		return fields.size();
 	}
 	
-	/*update the fields within this data point to a new collection */
+	/**update the fields within this data point to a new collection */
 	public void setFields(ArrayList<Feature> newFields){
 		fields = newFields;
 	}
