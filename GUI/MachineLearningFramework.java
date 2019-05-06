@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -75,14 +76,14 @@ public class MachineLearningFramework  extends JFrame{
 	public void setK(int k){
 		this.k = k;
 	}
-	
+
 	public void configurePrediction(int k, ExampleDistanceStrategy exStrat, CompositeDistanceStrategy compStrat,
 			SimpleDistanceStrategy charStrat, SimpleDistanceStrategy doubleStrat, SimpleDistanceStrategy intStrat, 
 			SimpleDistanceStrategy stringStrat){
 		this.k = k;
 		problem.setStrategies(exStrat, compStrat, charStrat, doubleStrat, intStrat, stringStrat);
 	}
-	
+
 	public void setMenuBarEnabled(boolean value){
 		//re enable all menu items
 		JMenuBar menuBar = getJMenuBar();
@@ -265,7 +266,14 @@ public class MachineLearningFramework  extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
 				try {
-					problem.serializedExport();
+					JFileChooser jfc = new JFileChooser();
+					JMenuItem source = (JMenuItem)e.getSource();
+					JPopupMenu parent = (JPopupMenu)source.getParent();
+					MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+
+					int result = jfc.showSaveDialog(m);
+					if(result == JFileChooser.APPROVE_OPTION)
+						problem.serializedExport(jfc.getSelectedFile().getAbsolutePath());
 				} catch (Exception e1) {
 					System.out.println("Export failed");
 				}
@@ -279,8 +287,16 @@ public class MachineLearningFramework  extends JFrame{
 	private class LoadProblemListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			try {
-				problem.serializedImport();
-				createdProblem = true;
+				JFileChooser jfc = new JFileChooser();
+				JMenuItem source = (JMenuItem)e.getSource();
+				JPopupMenu parent = (JPopupMenu)source.getParent();
+				MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+
+				int result = jfc.showOpenDialog(m);
+				if(result == JFileChooser.APPROVE_OPTION){
+					problem.serializedImport(jfc.getSelectedFile().getAbsolutePath());
+					createdProblem = true;
+				}
 			} catch (Exception e1) {
 				System.out.println(e1);
 				System.out.println("import failed");
@@ -301,9 +317,9 @@ public class MachineLearningFramework  extends JFrame{
 			if(createdProblem){
 				JMenuItem source = (JMenuItem)e.getSource();
 				JPopupMenu parent = (JPopupMenu)source.getParent();
-				MachineLearningFramework c =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+				MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
 
-				setContentPane(new AddExamplePanel(ExampleType.TrainingExample, c));
+				setContentPane(new AddExamplePanel(ExampleType.TrainingExample, m));
 				pack();
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -317,9 +333,9 @@ public class MachineLearningFramework  extends JFrame{
 			if(createdProblem){
 				JMenuItem source = (JMenuItem)e.getSource();
 				JPopupMenu parent = (JPopupMenu)source.getParent();
-				MachineLearningFramework c =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+				MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
 
-				setContentPane(new AddExamplePanel(ExampleType.TestExample, c));
+				setContentPane(new AddExamplePanel(ExampleType.TestExample, m));
 				pack();	
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -336,9 +352,9 @@ public class MachineLearningFramework  extends JFrame{
 				}else{
 					JMenuItem source = (JMenuItem)e.getSource();
 					JPopupMenu parent = (JPopupMenu)source.getParent();
-					MachineLearningFramework c =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+					MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
 
-					setContentPane(new EditExamplePanel(ExampleType.TrainingExample, c, selectedTrainingExample));
+					setContentPane(new EditExamplePanel(ExampleType.TrainingExample, m, selectedTrainingExample));
 					pack();
 				}
 			}else{
@@ -356,9 +372,9 @@ public class MachineLearningFramework  extends JFrame{
 				}else{
 					JMenuItem source = (JMenuItem)e.getSource();
 					JPopupMenu parent = (JPopupMenu)source.getParent();
-					MachineLearningFramework c =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+					MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
 
-					setContentPane(new EditExamplePanel(ExampleType.TestExample, c, selectedTestExample));
+					setContentPane(new EditExamplePanel(ExampleType.TestExample, m, selectedTestExample));
 					pack();
 				}
 			}else{
@@ -409,12 +425,12 @@ public class MachineLearningFramework  extends JFrame{
 	private class PredictConfigListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-					JMenuItem source = (JMenuItem)e.getSource();
-					JPopupMenu parent = (JPopupMenu)source.getParent();
-					MachineLearningFramework c =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+				JMenuItem source = (JMenuItem)e.getSource();
+				JPopupMenu parent = (JPopupMenu)source.getParent();
+				MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
 
-					setContentPane(new PredictionConfigurePanel(c, selectedTestExample));
-					pack();
+				setContentPane(new PredictionConfigurePanel(m, selectedTestExample));
+				pack();
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
@@ -465,12 +481,7 @@ public class MachineLearningFramework  extends JFrame{
 							dataElements.set(dataElements.size() - 1, CompositeFeature.parseFeature(prediction.toString()));
 							//replace the test example in the problem with updated one
 							problem.editTestExample(selectedTestExample, dataElements);
-						}
-						
-						
-						
-						
-						
+						}	
 					}	
 				}else{
 					JOptionPane.showMessageDialog(null, "Error: Please configure the prediction first");

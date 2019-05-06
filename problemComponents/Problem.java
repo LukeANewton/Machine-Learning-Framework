@@ -298,20 +298,7 @@ public class Problem implements Serializable{
 	 * @throws IOException
 	 */
 	public void serializedExport() throws IOException {
-		FileOutputStream fileOut = null;
-		try {
-			fileOut = new FileOutputStream(FILENAMESERIALIZED);
-		} catch (FileNotFoundException e1) {
-			System.out.println("pathname not accessable");
-			System.exit(0);
-		}
-		
-		ObjectOutputStream out;
-		out = new ObjectOutputStream(fileOut);
-		
-		out.writeObject(this);
-		out.close();
-		fileOut.close();
+		serializedExport(FILENAMESERIALIZED);
 	}
 	
 	/**
@@ -343,27 +330,7 @@ public class Problem implements Serializable{
 	 * @throws ClassNotFoundException
 	 */
 	public void serializedImport() throws IOException, ClassNotFoundException {
-		FileInputStream fileIn = null;
-		try {
-			fileIn = new FileInputStream(FILENAMESERIALIZED);
-		} catch (FileNotFoundException e1) {
-			System.out.println("file not found");
-			System.exit(0);
-		}
-		
-		ObjectInputStream in = new ObjectInputStream(fileIn);
-		
-		Problem newProblem = (Problem)in.readObject();
-		
-		trainingExamples = newProblem.getTrainingExamples();
-		testExamples = newProblem.getTestExamples();
-		fieldNames = newProblem.getFieldNames();
-		weights = newProblem.getWeights();
-		predictionError = newProblem.getPredictionError();
-		numberOfFields = newProblem.getNumberOfFields();
-		
-		in.close();
-		fileIn.close();
+		serializedImport(FILENAMESERIALIZED);
 	}
 	
 	/**
