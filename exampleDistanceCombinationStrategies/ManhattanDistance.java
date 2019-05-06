@@ -1,6 +1,3 @@
-/**
- * 
- */
 package exampleDistanceCombinationStrategies;
 
 /**
@@ -10,9 +7,7 @@ package exampleDistanceCombinationStrategies;
 public class ManhattanDistance implements ExampleDistanceStrategy {
 	private static final long serialVersionUID = -6821258004429397729L;
 
-	/* (non-Javadoc)
-	 * @see exampleDistanceCombinationFunctions.ExampleDistanceStrategy#combineDistances(java.lang.Double[][], int)
-	 */
+	/**combines the individual feature distances of each data point into one value*/
 	@Override
 	public double[] combineDistances(Double[][] distances, int unknownIndex) {
 		double[] pointDistances = new double[distances.length];
