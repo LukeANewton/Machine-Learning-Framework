@@ -1,6 +1,3 @@
-/**
- * 
- */
 package simpleFeatureDistanceStrategies;
 
 /**
@@ -10,14 +7,11 @@ package simpleFeatureDistanceStrategies;
 public class StringLengthEquals implements SimpleDistanceStrategy {
 	private static final long serialVersionUID = 6560550432550112360L;
 
-	/* (non-Javadoc)
-	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
-	 */
+	/**compare two features to find distance between them*/
 	@Override
 	public double calculateDistance(Object obj1, Object obj2) {
 		if (obj1.toString().length() == obj2.toString().length()) 
 			return 0;
 		return 1;
 	}
-
 }

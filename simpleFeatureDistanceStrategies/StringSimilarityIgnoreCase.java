@@ -1,6 +1,3 @@
-/**
- * 
- */
 package simpleFeatureDistanceStrategies;
 
 /**
@@ -10,9 +7,7 @@ package simpleFeatureDistanceStrategies;
 public class StringSimilarityIgnoreCase implements SimpleDistanceStrategy {
 	private static final long serialVersionUID = 4552245911865636723L;
 
-	/* (non-Javadoc)
-	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
-	 */
+	/**compare two features to find distance between them*/
 	@Override
 	public double calculateDistance(Object obj1, Object obj2) {
 		String str1 = ((String)obj1).toLowerCase();
@@ -30,5 +25,4 @@ public class StringSimilarityIgnoreCase implements SimpleDistanceStrategy {
 		
 		return distance;
 	}
-
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package simpleFeatureDistanceStrategies;
 
 /**
@@ -10,9 +7,7 @@ package simpleFeatureDistanceStrategies;
 public class StringSimilarity implements SimpleDistanceStrategy {
 	private static final long serialVersionUID = 2725121923889622758L;
 
-	/* (non-Javadoc)
-	 * @see simpleDistanceFunctions.SimpleDistanceFunction#calculateDistance(java.lang.Object, java.lang.Object)
-	 */
+	/**compare two features to find distance between them*/
 	@Override
 	public double calculateDistance(Object obj1, Object obj2) {
 		String str1 = (String)obj1;
@@ -32,5 +27,4 @@ public class StringSimilarity implements SimpleDistanceStrategy {
 		
 		return distance;
 	}
-
 }
