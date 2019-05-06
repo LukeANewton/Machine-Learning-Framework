@@ -23,7 +23,6 @@ import javax.swing.JTextField;
 
 
 import problemComponents.Problem;
-import problemComponents.SimpleFeatureType;
 import simpleFeatureDistanceStrategies.*;
 import compositeFeatureDistanceStrategies.*;
 import exampleDistanceCombinationStrategies.*;
@@ -345,6 +344,7 @@ public class PredictionConfigurePanel extends Container {
 	
 	/*listener to predict output based on customizations given*/
 	private class doneButtonListener implements ActionListener{
+		
 		public void actionPerformed(ActionEvent e) {
 			int k;
 			//try to get k value from user
@@ -359,8 +359,6 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please enter a valid integer between 1 and " + problem.getNumberOfTrainingExamples());
 				return;
 			}
-			
-			m.setK(k);
 
 			//get the selected example distance function user specified
 			String selectedExampleDistanceFunction = getSelectedButton(exampleDistanceFunctionButtonGroup);
@@ -369,7 +367,6 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select an example distance function to use");
 				return;
 			}
-			problem.setExampleDistanceFunction(exampleDistanceFunctionSelectionMap.get(selectedExampleDistanceFunction));
 			
 			//get the selected point distance function user specified
 			String selectedPointDistanceFunction = getSelectedButton(pointDistanceFunctionButtonGroup);
@@ -378,7 +375,6 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a composite distance function to use");
 				return;
 			}
-			problem.setCompositeDistanceFunction(compositeDistanceFunctionSelectionMap.get(selectedPointDistanceFunction));
 
 			//get the selected character distance function user specified
 			String selectedCharacterDistanceFunction = getSelectedButton(characterDistanceFunctionButtonGroup);
@@ -387,7 +383,6 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a character distance function to use");
 				return;
 			}
-			problem.setSimpleDistanceFunction(simpleDistanceFunctionSelectionMap.get(selectedCharacterDistanceFunction), SimpleFeatureType.CHARACTER);
 
 			//get the selected double distance function user specified
 			String selectedDoubleDistanceFunction = getSelectedButton(doubleDistanceFunctionButtonGroup);
@@ -396,7 +391,6 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a double distance function to use");
 				return;
 			}
-			problem.setSimpleDistanceFunction(simpleDistanceFunctionSelectionMap.get(selectedDoubleDistanceFunction), SimpleFeatureType.DOUBLE);
 
 			//get the selected integer distance function user specified
 			String selectedIntegerDistanceFunction = getSelectedButton(integerDistanceFunctionButtonGroup);
@@ -405,7 +399,6 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a integer distance function to use");
 				return;
 			}
-			problem.setSimpleDistanceFunction(simpleDistanceFunctionSelectionMap.get(selectedIntegerDistanceFunction), SimpleFeatureType.INTEGER);
 
 			//get the selected String distance function user specified
 			String selectedStringDistanceFunction = getSelectedButton(stringDistanceFunctionButtonGroup);
@@ -414,8 +407,16 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a String distance function to use");
 				return;
 			}
-			problem.setSimpleDistanceFunction(simpleDistanceFunctionSelectionMap.get(selectedStringDistanceFunction), SimpleFeatureType.STRING);
 
+			//set problem stategies to selected strategies
+			m.configurePrediction(k, exampleDistanceFunctionSelectionMap.get(selectedExampleDistanceFunction),
+					compositeDistanceFunctionSelectionMap.get(selectedPointDistanceFunction), 
+					simpleDistanceFunctionSelectionMap.get(selectedCharacterDistanceFunction),
+					simpleDistanceFunctionSelectionMap.get(selectedDoubleDistanceFunction),
+					simpleDistanceFunctionSelectionMap.get(selectedIntegerDistanceFunction),
+					simpleDistanceFunctionSelectionMap.get(selectedStringDistanceFunction)
+					);
+			
 			returnToDisplayContents();
 			m.setConfigured(true);
 		}

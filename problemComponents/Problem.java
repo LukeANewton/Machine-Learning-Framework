@@ -84,6 +84,17 @@ public class Problem implements Serializable{
 		this.weights = weights;
 	}
 	
+	public void setStrategies(ExampleDistanceStrategy exStrat, CompositeDistanceStrategy compStrat,
+			SimpleDistanceStrategy charStrat, SimpleDistanceStrategy doubleStrat, SimpleDistanceStrategy intStrat, 
+			SimpleDistanceStrategy stringStrat){
+		setExampleDistanceFunction(exStrat);
+		setCompositeDistanceFunction(compStrat);
+		setSimpleDistanceFunction(charStrat, SimpleFeatureType.CHARACTER);
+		setSimpleDistanceFunction(stringStrat, SimpleFeatureType.STRING);
+		setSimpleDistanceFunction(intStrat, SimpleFeatureType.INTEGER);
+		setSimpleDistanceFunction(doubleStrat, SimpleFeatureType.DOUBLE);
+	}
+	
 	/** return the prediction accuracy tracking object */
 	public PredictionError getPredictionError() {
 		return predictionError;

@@ -8,5 +8,5 @@ package problemComponents;
  *
  */
 public enum SimpleFeatureType {
-	INTEGER, DOUBLE, CHARACTER, STRING, BOOLEAN
+	BOOLEAN, INTEGER, DOUBLE, CHARACTER, STRING;
 }

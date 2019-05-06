@@ -17,10 +17,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import Control.Prediction;
+import compositeFeatureDistanceStrategies.CompositeDistanceStrategy;
+import exampleDistanceCombinationStrategies.ExampleDistanceStrategy;
 import problemComponents.CompositeFeature;
 import problemComponents.Feature;
 import problemComponents.Problem;
 import problemComponents.SimpleFeature;
+import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
 
 /**
  * This class is the frame which is displayed when the project is run. The fram contains a menu bar
@@ -71,6 +74,13 @@ public class MachineLearningFramework  extends JFrame{
 
 	public void setK(int k){
 		this.k = k;
+	}
+	
+	public void configurePrediction(int k, ExampleDistanceStrategy exStrat, CompositeDistanceStrategy compStrat,
+			SimpleDistanceStrategy charStrat, SimpleDistanceStrategy doubleStrat, SimpleDistanceStrategy intStrat, 
+			SimpleDistanceStrategy stringStrat){
+		this.k = k;
+		problem.setStrategies(exStrat, compStrat, charStrat, doubleStrat, intStrat, stringStrat);
 	}
 	
 	public void setMenuBarEnabled(boolean value){
