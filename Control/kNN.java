@@ -1,4 +1,5 @@
 package Control;
+
 import java.util.ArrayList;
 
 import exampleDistanceCombinationStrategies.ExampleDistanceStrategy;
@@ -14,56 +15,36 @@ import problemComponents.TrainingExample;
  * containing only the k closest points to an unknown point
  * 
  * @author cameron rushton, madelyn krasnay, luke newton
- * @ version 6
  */
 public class kNN {
 	/**
-	 * get all distances from an unknown point in 'targ' to all known points contained
-	 * in 'examples'.
 	 * 
-	 * @param examples DataSet object containing all training examples.
-	 * @param targ DataSet containing the test example we want to predict a value for
-	 * @param indexOfPointToPredict the index value of the point in targ we are predicting
-	 * @return a 2D grid of doubles, where the value at [i][j] corresponds to how far that value 
-	 * is from the corresponding value in the unknown point, normalized
+	 * @param k the number of closest neighbouring points to return
+	 * @param problem the object containing all the components of the current data set
+	 * @param indexOfPointToPredict the index value of the point in problem's test examples we are predicting
+	 * @return 
 	 */
-	private static Double[][] getNormalizedDistances(ArrayList<TrainingExample> examples, TestExample targ){
-		//number of training examples
-		int numPoints = examples.size();
-		//number of fields in each training example
-		int numAttribs = examples.get(0).getNumberOfFields();
-		//distances to normalize
-		Double[][] distances = getDistances(examples, targ);
-		//divisors to eventually normalize distances with 
-		double[] farthestDistances = new double[numAttribs];
-
-		//1) GET DIVISORS TO NORMALIZE DISTANCES (largest distance for each field)
-		//initialize divisors
-		for(int i = 0; i < numAttribs; i++){
-			farthestDistances[i] = 1;
+	public static ArrayList<DistanceContentPair> getNearestNeighbors(int k, Problem problem, int indexOfPointToPredict){
+		int numTrainingExamples = problem.getNumberOfTrainingExamples();
+		int unknownIndex = problem.getUnknownTestFieldPosition();
+		double[] weights = normalizeWeights(problem.getWeights());
+		
+		//get weighted point distances
+		double[] pointDistances = getExampleDistances(weights, problem.getTrainingExamples(), problem.getTestExample(indexOfPointToPredict), problem.getExampleCombinationStrategy());
+		
+		//this next section gets the k closest points by sorting field values based on distances
+		ArrayList<DistanceContentPair> distanceContentPairs = new ArrayList<>();
+		for(int pointNum = 0; pointNum < numTrainingExamples; pointNum++){
+			//build a list of point distances paired with the output value from that point
+			distanceContentPairs.add(new DistanceContentPair(
+					problem.getTrainingExample(pointNum).getField(unknownIndex).getContents() , pointDistances[pointNum]));
 		}
-		//iterate through every distance, getting largest distances
-		for(int pointNum = 0; pointNum < numPoints; pointNum++){
-			for(int attributeNum = 0; attributeNum < numAttribs; attributeNum++){
-				if(distances[pointNum][attributeNum] == null) continue;
-				
-				if(distances[pointNum][attributeNum] > farthestDistances[attributeNum])
-					farthestDistances[attributeNum] = distances[pointNum][attributeNum];
-			}
-		}
-
-		//2)NORMALIZE DISTANCES WITH DIVISORS OBTAINED PREVIOUSLY
-		for (int i = 0; i < distances.length; i++){
-			for (int j = 0; j < distances[0].length; j++){
-				if(distances[i][j] == null) continue;
-				
-				distances[i][j] =distances[i][j] / farthestDistances[j];
-			}
-		}
-		//return normalized distances
-		return distances;
+		//sort the output-distance pairs from smallest distance to largest
+		sortPairs(distanceContentPairs);
+		//return only the first k entries in the sorted list for k closest outputs
+		return new ArrayList<>(distanceContentPairs.subList(0, k));
 	}
-
+	
 	/**
 	 * converts all weights input by the user into normalized values that are relative to
 	 * the largest weight specified.
@@ -73,7 +54,7 @@ public class kNN {
 	 */
 	private static double[] normalizeWeights(double[] weights){
 		double maxWeight= 0;
-		//iterate through weights, getting min and max values to normalize
+		//iterate through weights, getting max value to normalize
 		for(int i = 0; i < weights.length; i++){
 			if (weights[i] > maxWeight)
 				maxWeight = weights[i];
@@ -85,7 +66,7 @@ public class kNN {
 		//return normalized weights
 		return weights;
 	}
-
+	
 	/**
 	 * 
 	 * @param examples DataSet containing the training examples use for the prediction
@@ -113,37 +94,54 @@ public class kNN {
 				distances[pointNum][attributeNum] *= weights[attributeNum];
 			}
 		}
-		
 		//calculate distance for a point based on problem strategy
 		return exampleDistanceStrategy.combineDistances(distances, unknownIndex);
 	}
-
+	
 	/**
+	 * get all distances from an unknown point in 'testExampleToPredict' to all known points contained
+	 * in 'examples'.
 	 * 
-	 * @param k the number of closest neighbouring points to return
-	 * @param problem the object containing all the components of the current data set
-	 * @param indexOfPointToPredict the index value of the point in problem's test examples we are predicting
-	 * @return 
+	 * @param examples DataSet object containing all training examples.
+	 * @param testExampleToPredict the test example we want to predict a value for
+	 * @param indexOfPointToPredict the index value of the point in targ we are predicting
+	 * @return a 2D grid of doubles, where the value at [i][j] corresponds to how far that value 
+	 * is from the corresponding value in the unknown point, normalized
 	 */
-	public static ArrayList<DistanceContentPair> getNearestNeighbors(int k, Problem problem, int indexOfPointToPredict){
-		int numTrainingExamples = problem.getNumberOfTrainingExamples();
-		int unknownIndex = problem.getUnknownTestFieldPosition();
-		double[] weights = normalizeWeights(problem.getWeights());
-		
-		//get weighted point distances
-		double[] pointDistances = getExampleDistances(weights, problem.getTrainingExamples(), problem.getTestExample(indexOfPointToPredict), problem.getExampleCombinationStrategy());
-		
-		//this next section gets the k closest points by sorting field values based on distances
-		ArrayList<DistanceContentPair> distanceContentPairs = new ArrayList<>();
-		for(int pointNum = 0; pointNum < numTrainingExamples; pointNum++){
-			//build a list of point distances paired with the output value from that point
-			distanceContentPairs.add(new DistanceContentPair(
-					problem.getTrainingExample(pointNum).getField(unknownIndex).getContents() , pointDistances[pointNum]));
+	private static Double[][] getNormalizedDistances(ArrayList<TrainingExample> examples, TestExample testExampleToPredict){
+		//number of training examples
+		int numPoints = examples.size();
+		//number of fields in each training example
+		int numAttribs = examples.get(0).getNumberOfFields();
+		//distances to normalize
+		Double[][] distances = getDistances(examples, testExampleToPredict);
+		//divisors to eventually normalize distances with 
+		double[] farthestDistances = new double[numAttribs];
+
+		//1) GET DIVISORS TO NORMALIZE DISTANCES (largest distance for each field)
+		//initialize divisors
+		for(int i = 0; i < numAttribs; i++){
+			farthestDistances[i] = 1;
 		}
-		//sort the output-distance pairs from smallest distance to largest
-		sortPairs(distanceContentPairs);
-		//return only the first k entries in the sorted list for k closest outputs
-		return new ArrayList<>(distanceContentPairs.subList(0, k));
+		//iterate through every distance, getting largest distances
+		for(int pointNum = 0; pointNum < numPoints; pointNum++){
+			for(int attributeNum = 0; attributeNum < numAttribs; attributeNum++){
+				if(distances[pointNum][attributeNum] == null) continue;
+				
+				if(distances[pointNum][attributeNum] > farthestDistances[attributeNum])
+					farthestDistances[attributeNum] = distances[pointNum][attributeNum];
+			}
+		}
+		//2)NORMALIZE DISTANCES WITH DIVISORS OBTAINED PREVIOUSLY
+		for (int i = 0; i < distances.length; i++){
+			for (int j = 0; j < distances[0].length; j++){
+				if(distances[i][j] == null) continue;
+				
+				distances[i][j] =distances[i][j] / farthestDistances[j];
+			}
+		}
+		//return normalized distances
+		return distances;
 	}
 
 	/**

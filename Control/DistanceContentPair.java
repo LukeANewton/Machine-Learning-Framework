@@ -4,7 +4,6 @@ package Control;
  * is from the value in the unknown point. For use in getting k-nearest-neighbors
  * 
  * @author luke newton
- * @version 1
  */
 public class DistanceContentPair {
 	//how far content value is from the unknown content value
@@ -18,11 +17,6 @@ public class DistanceContentPair {
 		this.distance = distance;
 	}
 
-	/** converts pair into a string (for debugging purposes mostly) */
-	public String toString(){
-		return "Distance: " + distance + "   Content: " + content.toString();
-	}
-	
 	/** returns the distance in the pair*/
 	public double getDistance() {
 		return distance;
@@ -42,4 +36,10 @@ public class DistanceContentPair {
 	public void setContent(Object content) {
 		this.content = content;
 	}
+	
+	/**toString override*/
+	public String toString(){
+		return "Distance: " + distance + "   Content: " + content.toString();
+	}
+	
 }
