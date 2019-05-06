@@ -22,9 +22,8 @@ public abstract class ExampleModificationPanel extends UserInputPanel {
 	 * @param exampleType specifies whether we are adding a training example or test example
 	 * @param problem the problem set we are working with
 	 */
-	public ExampleModificationPanel(ExampleType exampleType, Controller c){
-		super(c);
-		
+	public ExampleModificationPanel(ExampleType exampleType, MachineLearningFramework m){
+		super(m);
 		this.exampleType = exampleType;
 	}
 	

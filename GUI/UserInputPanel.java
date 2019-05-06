@@ -36,7 +36,7 @@ public abstract class UserInputPanel extends JPanel{
 	 * 
 	 * @param problem reference to the current problem being worked on
 	 */
-	public UserInputPanel(Controller c){
+	public UserInputPanel(MachineLearningFramework c){
 		super();
 
 		problem = c.problem;
@@ -105,23 +105,23 @@ public abstract class UserInputPanel extends JPanel{
 	 */
 	protected void returnToDisplayScreen(ActionEvent e){
 		//get the frame by getting the source of this event, and the window the source exists in
-		Controller controller = (Controller) SwingUtilities.windowForComponent((JButton)e.getSource());
+		MachineLearningFramework m = (MachineLearningFramework) SwingUtilities.windowForComponent((JButton)e.getSource());
 
-		returnToDisplayScreen(controller);
+		returnToDisplayScreen(m);
 	}
 
 	/**
 	 * returns to the main display window when a done button has been clicked
 	 * 
-	 * @param controller the Controller frame for the project
+	 * @param m the main frame for the project
 	 */
-	protected void returnToDisplayScreen(Controller controller){
+	protected void returnToDisplayScreen(MachineLearningFramework m){
 		//update the problem set in the frame
-		controller.problem = problem;
+		m.problem = problem;
 
 		//return to the main display of problem info
-		controller.setContentPane(new DisplayProblemContents(controller));
-		controller.pack();
+		m.setContentPane(new DisplayProblemContents(m));
+		m.pack();
 	}
 	
 	/*action listener for cancelling operation*/

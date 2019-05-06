@@ -22,10 +22,10 @@ public class EditWeightPanel extends UserInputPanel {
 	 * 
 	 * @param problem the problem set currently working with
 	 */
-	public EditWeightPanel(Controller c){
-		super(c);
+	public EditWeightPanel(MachineLearningFramework m){
+		super(m);
 		
-		createContent(c.problem.getNumberOfFields());
+		createContent(m.problem.getNumberOfFields());
 	}
 	
 	/**

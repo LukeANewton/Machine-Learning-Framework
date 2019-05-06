@@ -25,11 +25,11 @@ public class EditExamplePanel extends ExampleModificationPanel {
 	 * @param problem the problem set we are working with
 	 * @param exampleToEdit index of the example to edit
 	 */
-	public EditExamplePanel(ExampleType exampleType, Controller c, int exampleToEdit){
-		super(exampleType, c);
+	public EditExamplePanel(ExampleType exampleType, MachineLearningFramework m, int exampleToEdit){
+		super(exampleType, m);
 		this.exampleToEdit = exampleToEdit;
 
-		createContent(c.problem.getNumberOfFields());
+		createContent(m.problem.getNumberOfFields());
 	}
 
 	/**

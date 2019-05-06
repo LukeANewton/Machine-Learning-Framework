@@ -35,29 +35,28 @@ public class DisplayProblemContents extends Container {
 	//list to display test examples
 	protected JList<ArrayList<Feature>> testExamples;
 	//the JFrame this will be displayed in
-	private Controller controller;
+	private MachineLearningFramework mainWindow;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param problem problem set currently working with
 	 */
-	public DisplayProblemContents(Controller c){
+	public DisplayProblemContents(MachineLearningFramework m){
 		super();
-		problem = c.problem;
-		controller = c;
+		problem = m.problem;
+		mainWindow = m;
 
-		controller.selectedTrainingExample = -1;
-		controller.selectedTestExample = -1;
+		mainWindow.selectedTrainingExample = -1;
+		mainWindow.selectedTestExample = -1;
 
-		controller.setMenuBarEnabled(true);
+		mainWindow.setMenuBarEnabled(true);
 		
 		createContent();
 	}
 
 	/**create contents to display problem*/
 	private void createContent(){
-		//clear the controller
 		removeAll();
 		setLayout(new GridLayout(2, 1));
 
@@ -117,7 +116,7 @@ public class DisplayProblemContents extends Container {
 	private class DeselectTrainingExampleListener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
 			JList<?> list = (JList<?>)e.getSource();
-			Controller c = (Controller)SwingUtilities.getRoot(list);
+			MachineLearningFramework c = (MachineLearningFramework)SwingUtilities.getRoot(list);
 			int index = list.locationToIndex(e.getPoint());
 
 			if(c.selectedTrainingExample == index){
@@ -133,7 +132,7 @@ public class DisplayProblemContents extends Container {
 	private class DeselectTestExampleListener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
 			JList<?> list = (JList<?>)e.getSource();
-			Controller c = (Controller)SwingUtilities.getRoot(list);
+			MachineLearningFramework c = (MachineLearningFramework)SwingUtilities.getRoot(list);
 			int index = list.locationToIndex(e.getPoint());
 
 			if(c.selectedTestExample == index){

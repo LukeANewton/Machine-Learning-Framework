@@ -26,10 +26,10 @@ public class CreateProblemPanel extends UserInputPanel {
 	 * @param n number of features we want in a new problem
 	 * @param problem reference to the current problem being worked on
 	 */
-	public CreateProblemPanel(int n, Controller c){
-		super(c);
+	public CreateProblemPanel(int n, MachineLearningFramework m){
+		super(m);
 		numberOfFeatures = n;
-		c.setMenuBarEnabled(false);
+		m.setMenuBarEnabled(false);
 		createContent(n);
 	}
 
@@ -71,7 +71,7 @@ public class CreateProblemPanel extends UserInputPanel {
 			problem = new Problem(numberOfFeatures, fieldNames, defaultWeightings);
 			
 			//now that a probelm has been created, set this to true
-			Controller c = (Controller)SwingUtilities.getRoot(((JButton)e.getSource()));
+			MachineLearningFramework c = (MachineLearningFramework)SwingUtilities.getRoot(((JButton)e.getSource()));
 			c.setCreatedProblem(true);
 			
 			returnToDisplayScreen(e);

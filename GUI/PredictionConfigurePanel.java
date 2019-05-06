@@ -50,7 +50,7 @@ public class PredictionConfigurePanel extends Container {
 	private HashMap<String, SimpleDistanceStrategy> simpleDistanceFunctionSelectionMap;
 	private HashMap<String, CompositeDistanceStrategy> compositeDistanceFunctionSelectionMap;
 	private HashMap<String, ExampleDistanceStrategy> exampleDistanceFunctionSelectionMap;
-	private Controller controller;
+	private MachineLearningFramework m;
 	
 	
 	/**
@@ -59,15 +59,15 @@ public class PredictionConfigurePanel extends Container {
 	 * @param problem the problem set currently working with
 	 * @param exampleToPredict index value of the test example to predict
 	 */
-	public PredictionConfigurePanel(Controller c, int exampleToPredict){
+	public PredictionConfigurePanel(MachineLearningFramework m, int exampleToPredict){
 		super(); 
-		this.problem = c.problem;
-		this.controller = c;
-		c.setMenuBarEnabled(false);
+		this.problem = m.problem;
+		this.m = m;
+		m.setMenuBarEnabled(false);
 		simpleDistanceFunctionSelectionMap = new HashMap<>();
 		compositeDistanceFunctionSelectionMap = new HashMap<>();
 		exampleDistanceFunctionSelectionMap = new HashMap<>();
-		c.setPreferredSize(new Dimension(600, 600));
+		m.setPreferredSize(new Dimension(600, 600));
 		createContent();
 	}
 
@@ -360,7 +360,7 @@ public class PredictionConfigurePanel extends Container {
 				return;
 			}
 			
-			controller.setK(k);
+			m.setK(k);
 
 			//get the selected example distance function user specified
 			String selectedExampleDistanceFunction = getSelectedButton(exampleDistanceFunctionButtonGroup);
@@ -417,7 +417,7 @@ public class PredictionConfigurePanel extends Container {
 			problem.setSimpleDistanceFunction(simpleDistanceFunctionSelectionMap.get(selectedStringDistanceFunction), SimpleFeatureType.STRING);
 
 			returnToDisplayContents();
-			controller.setConfigured(true);
+			m.setConfigured(true);
 		}
 
 		/**
@@ -439,11 +439,11 @@ public class PredictionConfigurePanel extends Container {
 
 	private void returnToDisplayContents(){
 		//update the problem set in the frame
-		controller.problem = problem;
-		controller.setPreferredSize(new Dimension(400, 648));
+		m.problem = problem;
+		m.setPreferredSize(new Dimension(400, 648));
 		//return to the main display of problem info
-		controller.setContentPane(new DisplayProblemContents(controller));
-		controller.pack();
+		m.setContentPane(new DisplayProblemContents(m));
+		m.pack();
 	}
 	
 	/*action listener for cancelling operation*/
