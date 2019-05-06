@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -10,10 +11,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import Control.Prediction;
+import problemComponents.CompositeFeature;
+import problemComponents.Feature;
 import problemComponents.Problem;
+import problemComponents.SimpleFeature;
 
 /**
  * This class is the frame which is displayed when the project is run. The fram contains a menu bar
@@ -34,6 +41,10 @@ public class Controller  extends JFrame{
 	protected int selectedTestExample;
 	//indicator of wether a problem has been created/loaded yet
 	private boolean createdProblem;
+	//indicatr of whether prediciton parameters has been configured yet
+	private boolean configuredPrediction;
+	//the number of nearest neighbors to find in prediction
+	private int k;
 
 	/**Constructor*/
 	public Controller(){
@@ -41,6 +52,7 @@ public class Controller  extends JFrame{
 		super("machine learning framework");
 		problem = new Problem(1);
 		createdProblem = false;
+		configuredPrediction = false;
 		//set selected examples to -1 to indicate no selection
 		selectedTrainingExample = -1;
 		selectedTestExample = -1;
@@ -52,11 +64,21 @@ public class Controller  extends JFrame{
 		this.createdProblem = createdProblem;
 	}
 
+
+	public void setConfigured(boolean b) {
+		configuredPrediction = b;
+	}
+
+	public void setK(int k){
+		this.k = k;
+	}
+	
 	public void setMenuBarEnabled(boolean value){
 		//re enable all menu items
 		JMenuBar menuBar = getJMenuBar();
 		for(int i = 0; i < menuBar.getMenuCount(); i++){
-			for(int j = 0; j < menuBar.getMenu(i).getItemCount(); j++)
+			int items = menuBar.getMenu(i).getItemCount();
+			for(int j = 0; j < items; j++)
 				menuBar.getMenu(i).getItem(j).setEnabled(value);
 		}
 	}
@@ -141,12 +163,18 @@ public class Controller  extends JFrame{
 		editTestExample.addActionListener(new EditTestExampleListener());
 		testExampleMenu.add(editTestExample);
 
-		JMenuItem predictTestExample = new JMenuItem("predict");
-		predictTestExample.addActionListener(new PredictTestListener());
-		testExampleMenu.add(predictTestExample);
-
 		//add test example menu to menu bar
 		menuBar.add(testExampleMenu);
+
+		JMenu predictMenu = new JMenu("Prediction");
+		JMenuItem configPrediction = new JMenuItem("configure predictions");
+		configPrediction.addActionListener(new PredictConfigListener());
+		predictMenu.add(configPrediction);
+
+		JMenuItem predictTestExample = new JMenuItem("make prediction");
+		predictTestExample.addActionListener(new PredictTestExampleListener());
+		predictMenu.add(predictTestExample);
+		menuBar.add(predictMenu);
 
 		//set menu bar visible
 		menuBar.setVisible(true);
@@ -198,7 +226,7 @@ public class Controller  extends JFrame{
 				JMenuItem source = (JMenuItem)e.getSource();
 				JPopupMenu parent = (JPopupMenu)source.getParent();
 				Controller c =  (Controller)SwingUtilities.getWindowAncestor(parent.getInvoker());
-				
+
 				setContentPane(new CreateProblemPanel(numFeatures, c));
 				pack();
 			}
@@ -213,7 +241,7 @@ public class Controller  extends JFrame{
 				JMenuItem source = (JMenuItem)e.getSource();
 				JPopupMenu parent = (JPopupMenu)source.getParent();
 				Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
-				
+
 				setContentPane(new EditWeightPanel(c));
 				pack();
 			}else{
@@ -280,7 +308,7 @@ public class Controller  extends JFrame{
 				JMenuItem source = (JMenuItem)e.getSource();
 				JPopupMenu parent = (JPopupMenu)source.getParent();
 				Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
-				
+
 				setContentPane(new AddExamplePanel(ExampleType.TestExample, c));
 				pack();	
 			}else{
@@ -299,7 +327,7 @@ public class Controller  extends JFrame{
 					JMenuItem source = (JMenuItem)e.getSource();
 					JPopupMenu parent = (JPopupMenu)source.getParent();
 					Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
-					
+
 					setContentPane(new EditExamplePanel(ExampleType.TrainingExample, c, selectedTrainingExample));
 					pack();
 				}
@@ -319,7 +347,7 @@ public class Controller  extends JFrame{
 					JMenuItem source = (JMenuItem)e.getSource();
 					JPopupMenu parent = (JPopupMenu)source.getParent();
 					Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
-					
+
 					setContentPane(new EditExamplePanel(ExampleType.TestExample, c, selectedTestExample));
 					pack();
 				}
@@ -368,19 +396,75 @@ public class Controller  extends JFrame{
 	}
 
 	/**Action listener to predict an output value for a test example int the problem set*/
-	private class PredictTestListener implements ActionListener{
+	private class PredictConfigListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				if(selectedTestExample == -1){
-					JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
-				}else{
 					JMenuItem source = (JMenuItem)e.getSource();
 					JPopupMenu parent = (JPopupMenu)source.getParent();
 					Controller c =  (Controller)SwingUtilities.getRoot(parent.getInvoker());
 
-					setContentPane(new PredictTestPanel(c, selectedTestExample));
+					setContentPane(new PredictionConfigurePanel(c, selectedTestExample));
 					pack();
-				}	
+			}else{
+				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
+			}
+		}
+	}
+
+	/**Action listener to predict an output value for a test example int the problem set*/
+	private class PredictTestExampleListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			if(createdProblem){
+				if(configuredPrediction){
+					if(selectedTestExample == -1){
+						JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
+					}else{
+						//make prediction
+						Object prediction = Prediction.getPrediction(k, problem, selectedTestExample);
+
+						//ask the user if they want to compare the predicted value against a known value
+						int result = JOptionPane.showConfirmDialog(null, "prediction result is " + prediction.toString() + ", do you want to compare against a known value?",
+								"prediction dialog box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+						/*if user says yes, get a value from them and update the accuracy*/
+						if(result == JOptionPane.YES_OPTION){
+							JPanel initPanel = new JPanel();
+							initPanel.add(new JLabel("Enter known output value:"));
+							JTextField numOfFeaturesField = new JTextField(20);
+							initPanel.add(numOfFeaturesField);
+
+							//get known ouput from user and parse
+							SimpleFeature knownOutput = SimpleFeature.parseSimpleFeature(
+									JOptionPane.showInputDialog(initPanel, "Enter known output value:", "Known value", JOptionPane.PLAIN_MESSAGE)
+									);
+							//update accuracy
+							problem.updateAccuracy(prediction, knownOutput.getContents());
+							//display update accuracy
+							JOptionPane.showMessageDialog(null, "Current prediction accuracy is " + problem.getPredictionError().getAccuracy());
+						}
+
+						//ask the user if they want to replace the output of test example in problem with this prediction
+						result = JOptionPane.showConfirmDialog(null, "prediction result is " + prediction.toString() + ", do you want to overwrite \nthe example you predicted for to contain this result?",
+								"prediction dialog box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+						/*if user says yes, add that prediction to the test example*/
+						if(result == JOptionPane.YES_OPTION){
+							//the the current test exmaple
+							ArrayList<Feature> dataElements = problem.getTestExample(selectedTestExample).getFields();
+							//set the output of the test example to the predicted value
+							dataElements.set(dataElements.size() - 1, CompositeFeature.parseFeature(prediction.toString()));
+							//replace the test example in the problem with updated one
+							problem.editTestExample(selectedTestExample, dataElements);
+						}
+						
+						
+						
+						
+						
+					}	
+				}else{
+					JOptionPane.showMessageDialog(null, "Error: Please configure the prediction first");
+				}
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
