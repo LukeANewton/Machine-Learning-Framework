@@ -18,6 +18,8 @@ public class ProblemTest {
 	ArrayList<TestExample> testExamples;
 	ArrayList<String> fieldNames;
 	double[] weights;
+	//file name of the file used to save/load a probkem from
+	private static final String FILENAMESERIALIZED = "problemSerialized.txt";
 
 	@Before
 	public void Setup(){
@@ -213,10 +215,10 @@ public class ProblemTest {
     	newPoint.add(CompositeFeature.parseFeature(""));
     	problem.addTestExample(newPoint);
     	
-    	problem.serializedExport();
+    	problem.serializedExport(FILENAMESERIALIZED);
  
 		Problem problem2 = new Problem(problem.getNumberOfFields());
-		problem2.serializedImport();
+		problem2.serializedImport(FILENAMESERIALIZED);
 		
 		assertTrue(problem.toString().equals(problem2.toString()));
 	}

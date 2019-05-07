@@ -113,7 +113,7 @@ public class CompositeFeature implements Feature {
 		StringBuffer buf = new StringBuffer();
 		buf.append("(" + contents.get(0));
 		for(int i = 1; i < contents.size(); i++)
-			buf.append("," + contents.get(i));
+			buf.append(", " + contents.get(i));
 		buf.append(")");
 		return buf.toString();
 	}
