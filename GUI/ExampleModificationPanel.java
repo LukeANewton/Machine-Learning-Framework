@@ -8,10 +8,8 @@ import problemComponents.Feature;
  * Superclass for AddExamplePanel and EditExamplePanel to reduce code repetition
  * 
  * @author luke newton, madelyn krasnay
- *
  */
-public abstract class ExampleModificationPanel extends UserInputPanel {
-	//serialized ID
+public abstract class ExampleModificationPanel extends UserInputContentPanel {
 	private static final long serialVersionUID = -8196813862398776945L;
 	//specifies whether we are adding a test example or training example
 	protected ExampleType exampleType;
@@ -35,9 +33,8 @@ public abstract class ExampleModificationPanel extends UserInputPanel {
 	protected void createContent(int n){
 		//create the list of texts for titles to go with each inputPanel
 		ArrayList<String> panelTitle = new ArrayList<>();
-		for(int i = 0; i < n; i++){
+		for(int i = 0; i < n; i++)
 			panelTitle.add("Enter value for " + problem.getFieldName(i) + " field: ");
-		}
 		
 		//call to super create content
 		super.createContent(n, panelTitle);
@@ -50,9 +47,9 @@ public abstract class ExampleModificationPanel extends UserInputPanel {
 	 */
 	protected ArrayList<Feature> buildExampleFromTextFields(){
 		ArrayList<Feature> dataElements = new ArrayList<>();
-		for(int i = 0; i < panels.size(); i++){
+		int numPanels = panels.size();
+		for(int i = 0; i < numPanels; i++)
 			dataElements.add(CompositeFeature.parseFeature(panels.get(i).getInput()));
-		}
 		return dataElements;
 	}
 }

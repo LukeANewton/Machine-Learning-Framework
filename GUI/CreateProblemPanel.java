@@ -12,10 +12,8 @@ import problemComponents.Problem;
  * This class is the content and functionality required to create a new problem set.
  * 
  * @author luke newton, madelyn krasnay
- *
  */
-public class CreateProblemPanel extends UserInputPanel {
-	//sereializable ID
+public class CreateProblemPanel extends UserInputContentPanel {
 	private static final long serialVersionUID = -3929743187401378236L;
 	//number of features in a training/test example
 	private int numberOfFeatures;
@@ -24,7 +22,7 @@ public class CreateProblemPanel extends UserInputPanel {
 	 *Constructor
 	 * 
 	 * @param n number of features we want in a new problem
-	 * @param problem reference to the current problem being worked on
+	 * @param m the parent JFrame this panel will be contained in
 	 */
 	public CreateProblemPanel(int n, MachineLearningFramework m){
 		super(m);
@@ -44,7 +42,6 @@ public class CreateProblemPanel extends UserInputPanel {
 		for(int i = 0; i < n; i++){
 			fieldNames.add("Enter field " + (i + 1) + " name: ");
 		}
-		
 		//call to super create content
 		super.createContent(n, fieldNames);
 		
@@ -57,7 +54,7 @@ public class CreateProblemPanel extends UserInputPanel {
 		public void actionPerformed(ActionEvent e) {
 			/*get the input from each InputPanel in panels list*/
 			ArrayList<String> fieldNames = new ArrayList<>();
-			for(InputPanel panel : panels){
+			for(TextInputPanel panel : panels){
 				fieldNames.add(panel.getInput());
 			}
 
@@ -71,10 +68,10 @@ public class CreateProblemPanel extends UserInputPanel {
 			problem = new Problem(numberOfFeatures, fieldNames, defaultWeightings);
 			
 			//now that a probelm has been created, set this to true
-			MachineLearningFramework c = (MachineLearningFramework)SwingUtilities.getRoot(((JButton)e.getSource()));
-			c.setCreatedProblem(true);
+			MachineLearningFramework m = (MachineLearningFramework)SwingUtilities.getRoot(((JButton)e.getSource()));
+			m.setCreatedProblem(true);
 			
-			returnToDisplayScreen(e);
+			returnToDisplayScreen(m);
 		}
 	}
 }

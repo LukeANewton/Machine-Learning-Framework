@@ -13,7 +13,6 @@ import problemComponents.Feature;
  *
  */
 public class EditExamplePanel extends ExampleModificationPanel {
-	//serialized ID
 	private static final long serialVersionUID = -8203983755809461898L;
 	//index value of the example we are editing
 	private int exampleToEdit;
@@ -28,8 +27,7 @@ public class EditExamplePanel extends ExampleModificationPanel {
 	public EditExamplePanel(ExampleType exampleType, MachineLearningFramework m, int exampleToEdit){
 		super(exampleType, m);
 		this.exampleToEdit = exampleToEdit;
-
-		createContent(m.problem.getNumberOfFields());
+		createContent(m.getProblem().getNumberOfFields());
 	}
 
 	/**
@@ -42,16 +40,13 @@ public class EditExamplePanel extends ExampleModificationPanel {
 		super.createContent(n);
 
 		/*fill the contents of the panels with the current contents of that feature*/
-		for(int i = 0; i < panels.size(); i++){	
-			if(exampleType == ExampleType.TestExample){
+		int numPanels = panels.size();
+		for(int i = 0; i < numPanels; i++){	
+			if(exampleType == ExampleType.TestExample)
 				panels.get(i).setTextFieldText(problem.getTestExample(exampleToEdit).getFields().get(i).toString());
-				//textFields.set(i, new JTextField(problem.getTestExample(exampleToEdit).get(i).toString()));
-			} else {
+			else 
 				panels.get(i).setTextFieldText(problem.getTrainingExample(exampleToEdit).getFields().get(i).toString());
-				//textFields.set(i, new JTextField(problem.getTrainingExample(exampleToEdit).get(i).toString()));
-			}
 		}
-
 		//add specialized listener for this type of panel
 		doneButton.addActionListener(new AcceptExampleListener());
 	}
@@ -63,14 +58,12 @@ public class EditExamplePanel extends ExampleModificationPanel {
 			ArrayList<Feature> dataElements = buildExampleFromTextFields();
 
 			/*the exampleType eNum passed to constructor tells whether we're editting a training or test example*/
-			if(exampleType == ExampleType.TestExample){
+			if(exampleType == ExampleType.TestExample)
 				problem.editTestExample(exampleToEdit, dataElements);
-			} else if(exampleType == ExampleType.TrainingExample){
+			else if(exampleType == ExampleType.TrainingExample)
 				problem.editTrainingExample(exampleToEdit, dataElements);
-			}
 
 			returnToDisplayScreen(e);
 		}
 	}
-
 }

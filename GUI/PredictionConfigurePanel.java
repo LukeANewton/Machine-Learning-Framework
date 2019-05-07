@@ -1,7 +1,5 @@
 package GUI;
 
-
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,16 +26,11 @@ import compositeFeatureDistanceStrategies.*;
 import exampleDistanceCombinationStrategies.*;
 
 /**
- * This class has the contents and functionality to predict a value for a test exmaple
- * 
- * currently always uses all training examples and euclidean distance. will be eventually updated
- * to have these be customizable
+ * This class has the contents and functionality to select the metrics that will be used in predictions
  * 
  * @author luke newton
- *
  */
-public class PredictionConfigurePanel extends Container {
-	//serialized ID
+public class PredictionConfigurePanel extends JPanel {
 	private static final long serialVersionUID = 22892476582418299L;
 	//the problem set currently working with
 	private Problem problem;
@@ -46,11 +39,13 @@ public class PredictionConfigurePanel extends Container {
 	//group of radio buttons to specify which distance functions to use
 	private ButtonGroup exampleDistanceFunctionButtonGroup, pointDistanceFunctionButtonGroup, characterDistanceFunctionButtonGroup, 
 	doubleDistanceFunctionButtonGroup, integerDistanceFunctionButtonGroup, stringDistanceFunctionButtonGroup;
+	//maps of radio button texts to the corresponding strategies
 	private HashMap<String, SimpleDistanceStrategy> simpleDistanceFunctionSelectionMap;
 	private HashMap<String, CompositeDistanceStrategy> compositeDistanceFunctionSelectionMap;
 	private HashMap<String, ExampleDistanceStrategy> exampleDistanceFunctionSelectionMap;
+	//the parent JFrame this panel is displayed in
 	private MachineLearningFramework m;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -59,7 +54,7 @@ public class PredictionConfigurePanel extends Container {
 	 */
 	public PredictionConfigurePanel(MachineLearningFramework m, int exampleToPredict){
 		super(); 
-		this.problem = m.problem;
+		this.problem = m.getProblem();
 		this.m = m;
 		m.setMenuBarEnabled(false);
 		simpleDistanceFunctionSelectionMap = new HashMap<>();
@@ -72,7 +67,6 @@ public class PredictionConfigurePanel extends Container {
 	private void createContent(){
 		removeAll();
 
-		//need a row for specifying  k value, specifying point distance function and done button
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -80,194 +74,79 @@ public class PredictionConfigurePanel extends Container {
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
-		
-		/*create the collection of radio buttons to specify which example distance function to use*/
-		//put all related buttons in a bordered box
+
+		//create the collection of radio buttons to specify which example distance function to use
 		JPanel exampleDistanceFunctionSelection = new JPanel(new GridLayout(2,2));
 		exampleDistanceFunctionSelection.setBorder(BorderFactory.createTitledBorder("Example Distance Function"));
-
-		//button group only allows one button to be selected at a time
 		exampleDistanceFunctionButtonGroup = new ButtonGroup();
-
-		/*add radio buttons for each point distance option to ButtonGroup and Panel*/
-		JRadioButton radioButton = new JRadioButton("Summation");
-		addRadioButton(radioButton, exampleDistanceFunctionButtonGroup, exampleDistanceFunctionSelection, new SimpleSummation());
-		
-		radioButton = new JRadioButton("Absolute Summation");
-		addRadioButton(radioButton, exampleDistanceFunctionButtonGroup, exampleDistanceFunctionSelection, new exampleDistanceCombinationStrategies.ManhattanDistance());
-		
-		radioButton = new JRadioButton("Euclidean Distance");
-		addRadioButton(radioButton, exampleDistanceFunctionButtonGroup, exampleDistanceFunctionSelection, new EuclidianDistance());
-
-		radioButton = new JRadioButton("Number Of Similar Features");
-		addRadioButton(radioButton, exampleDistanceFunctionButtonGroup, exampleDistanceFunctionSelection, new NumberOfSimilarFeatures());
-		
-		
-		//add bordered panel for radio buttons to main panel
-		exampleDistanceFunctionSelection.setVisible(true);
+		addRadioButton("Summation", exampleDistanceFunctionButtonGroup, exampleDistanceFunctionSelection, new SimpleSummation());
+		addRadioButton("Absolute Summation", exampleDistanceFunctionButtonGroup, exampleDistanceFunctionSelection, new exampleDistanceCombinationStrategies.ManhattanDistance());
+		addRadioButton("Euclidean Distance", exampleDistanceFunctionButtonGroup, exampleDistanceFunctionSelection, new EuclidianDistance());
+		addRadioButton("Number Of Similar Features", exampleDistanceFunctionButtonGroup, exampleDistanceFunctionSelection, new NumberOfSimilarFeatures());
 		add(exampleDistanceFunctionSelection, c);
 		c.gridy++;
 
-		/*create the collection of radio buttons to specify which point distance function to use*/
-		//put all related buttons in a bordered box
+		//create the collection of radio buttons to specify which point distance function to use
 		JPanel pointDistanceFunctionSelection = new JPanel(new GridLayout(3,2));
 		pointDistanceFunctionSelection.setBorder(BorderFactory.createTitledBorder("Composite Distance Function"));
-
-		//button group only allows one button to be selected at a time
 		pointDistanceFunctionButtonGroup = new ButtonGroup();
-
-		/*add radio buttons for each point distance option to ButtonGroup and Panel*/
-		radioButton = new JRadioButton("Summation");
-		addRadioButton(radioButton, pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new compositeFeatureDistanceStrategies.ManhattanDistance());
-
-		radioButton = new JRadioButton("Euclidean Distance");
-		addRadioButton(radioButton, pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new EuclideanDistance());
-
-		radioButton = new JRadioButton("Maximum Distance");
-		addRadioButton(radioButton, pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new ChebyshevDistance());
-
-		radioButton = new JRadioButton("Number Of Similar Features");
-		addRadioButton(radioButton, pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new NumberSimilarFeatures());
-		
-		radioButton = new JRadioButton("Exactly Equivalent");
-		addRadioButton(radioButton, pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new CompositeEquivalence());
-		//add bordered panel for radio buttons to main panel
-		pointDistanceFunctionSelection.setVisible(true);
+		addRadioButton("Summation", pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new compositeFeatureDistanceStrategies.ManhattanDistance());
+		addRadioButton("Euclidean Distance", pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new EuclideanDistance());
+		addRadioButton("Maximum Distance", pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new ChebyshevDistance());
+		addRadioButton("Number Of Similar Features", pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new NumberSimilarFeatures());
+		addRadioButton("Exactly Equivalent", pointDistanceFunctionButtonGroup, pointDistanceFunctionSelection, new CompositeEquivalence());
 		add(pointDistanceFunctionSelection, c);
 		c.gridy++;
 
-		/*create the collection of radio buttons to specify which character distance function to use*/
-		//put all related buttons in a bordered box
+		//create the collection of radio buttons to specify which character distance function to use
 		JPanel characterDistanceFunctionSelection = new JPanel(new GridLayout(3,2));
 		characterDistanceFunctionSelection.setBorder(BorderFactory.createTitledBorder("Character Distance Function"));
-
-		//button group only allows one button to be selected at a time
 		characterDistanceFunctionButtonGroup = new ButtonGroup();
-
-		/*add radio buttons for each distance option to ButtonGroup and Panel*/
-		String radioButtonName = "Characters Equal";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterEquals());
-
-		radioButtonName = "Characters Equal, Ignore Case";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterEqualsIgnoreCase());
-
-		radioButtonName = "Character Difference";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterDistance());
-
-		radioButtonName = "Character Difference, Ignore Case";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterDistanceIgnoreCase());
-
-		radioButtonName = "Absolute Character Difference";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterAbsDistance());
-
-		radioButtonName = "Absolute Character Difference, Ignore Case";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterAbsDistanceIgnoreCase());
-
-		//add bordered panel for radio buttons to main panel
-		characterDistanceFunctionSelection.setVisible(true);
+		addRadioButton("Characters Equal", characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterEquals());
+		addRadioButton("Characters Equal, Ignore Case", characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterEqualsIgnoreCase());
+		addRadioButton("Character Difference", characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterDistance());
+		addRadioButton("Character Difference, Ignore Case", characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterDistanceIgnoreCase());
+		addRadioButton("Absolute Character Difference", characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterAbsDistance());
+		addRadioButton("Absolute Character Difference, Ignore Case", characterDistanceFunctionButtonGroup, characterDistanceFunctionSelection, new CharacterAbsDistanceIgnoreCase());
 		add(characterDistanceFunctionSelection, c);
 		c.gridy++;
 
-		/*create the collection of radio buttons to specify which double distance function to use*/
-		//put all related buttons in a bordered box
+		//create the collection of radio buttons to specify which double distance function to use
 		JPanel doubleDistanceFunctionSelection = new JPanel(new GridLayout(1,2));
 		doubleDistanceFunctionSelection.setBorder(BorderFactory.createTitledBorder("Double Distance Function"));
-
-		//button group only allows one button to be selected at a time
 		doubleDistanceFunctionButtonGroup = new ButtonGroup();
-
-		/*add radio buttons for each distance option to ButtonGroup and Panel*/
-		radioButtonName = "Double Difference";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, doubleDistanceFunctionButtonGroup, doubleDistanceFunctionSelection, new DoubleDistance());
-
-		radioButtonName = "Absolute Double Difference";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, doubleDistanceFunctionButtonGroup, doubleDistanceFunctionSelection, new DoubleAbsDistance());
-
-		//add bordered panel for radio buttons to main panel
-		doubleDistanceFunctionSelection.setVisible(true);
+		addRadioButton("Double Difference", doubleDistanceFunctionButtonGroup, doubleDistanceFunctionSelection, new DoubleDistance());
+		addRadioButton("Absolute Double Difference", doubleDistanceFunctionButtonGroup, doubleDistanceFunctionSelection, new DoubleAbsDistance());
 		add(doubleDistanceFunctionSelection, c);
 		c.gridy++;
 
-		/*create the collection of radio buttons to specify which integer distance function to use*/
-		//put all related buttons in a bordered box
+		//create the collection of radio buttons to specify which integer distance function to use
 		JPanel integerDistanceFunctionSelection = new JPanel(new GridLayout(1,2));
 		integerDistanceFunctionSelection.setBorder(BorderFactory.createTitledBorder("Integer Distance Function"));
-
-		//button group only allows one button to be selected at a time
 		integerDistanceFunctionButtonGroup = new ButtonGroup();
-
-		/*add radio buttons for each distance option to ButtonGroup and Panel*/
-		radioButtonName = "Integer Difference";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, integerDistanceFunctionButtonGroup, integerDistanceFunctionSelection, new IntegerDistance());
-
-		radioButtonName = "Absolute Integer Difference";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, integerDistanceFunctionButtonGroup, integerDistanceFunctionSelection, new IntegerAbsDistance());
-
-		//add bordered panel for radio buttons to main panel
-		integerDistanceFunctionSelection.setVisible(true);
+		addRadioButton("Integer Difference", integerDistanceFunctionButtonGroup, integerDistanceFunctionSelection, new IntegerDistance());
+		addRadioButton("Absolute Integer Difference", integerDistanceFunctionButtonGroup, integerDistanceFunctionSelection, new IntegerAbsDistance());
 		add(integerDistanceFunctionSelection, c);
 		c.gridy++;
 
-		/*create the collection of radio buttons to specify which string distance function to use*/
-		//put all related buttons in a bordered box
+		//create the collection of radio buttons to specify which string distance function to use
 		JPanel stringDistanceFunctionSelection = new JPanel(new GridLayout(4,2));
 		stringDistanceFunctionSelection.setBorder(BorderFactory.createTitledBorder("String Distance Function"));
-
-		//button group only allows one button to be selected at a time
 		stringDistanceFunctionButtonGroup = new ButtonGroup();
-
-		/*add radio buttons for each distance option to ButtonGroup and Panel*/
-		radioButtonName = "Equal Strings";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringEquals());
-
-		radioButtonName = "Equal Strings, Ignore Case";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringEqualsIgnoreCase());
-
-		radioButtonName = "Number of equal characters";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringSimilarity());
-
-		radioButtonName = "Number of equal characters, Ignore Case";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringSimilarityIgnoreCase());
-
-		radioButtonName = "Equal Length";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringLengthEquals());
-		
-		radioButtonName = "Difference in Length";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringLengthDistance());
-
-		radioButtonName = "Equal Word Count";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringWordCountEquals());
-		
-		radioButtonName = "Difference in Word Count";
-		radioButton = new JRadioButton(radioButtonName);
-		addRadioButton(radioButton, stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringWordCountDistance());
-
-		//add bordered panel for radio buttons to main panel
-		stringDistanceFunctionSelection.setVisible(true);
+		addRadioButton("Equal Strings", stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringEquals());
+		addRadioButton("Equal Strings, Ignore Case", stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringEqualsIgnoreCase());
+		addRadioButton("Number of equal characters", stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringSimilarity());
+		addRadioButton("Number of equal characters, Ignore Case", stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringSimilarityIgnoreCase());
+		addRadioButton("Equal Length", stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringLengthEquals());
+		addRadioButton("Difference in Length", stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringLengthDistance());
+		addRadioButton("Equal Word Count", stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringWordCountEquals());
+		addRadioButton("Difference in Word Count", stringDistanceFunctionButtonGroup, stringDistanceFunctionSelection, new StringWordCountDistance());
 		add(stringDistanceFunctionSelection, c);
 		c.gridy++;
 
+		//create input panel for specifying number of nearest neighbors to use
 		JPanel kInputPanel = new JPanel(new GridLayout(1,2));
-		//add a JLabel to describe TextField
 		kInputPanel.add(new JLabel("Specify how many neighbors to use in prediction: "));
-		/*add textfield to get input for k*/
 		kValueTextField = new JTextField(20);
 		kInputPanel.add(kValueTextField);
 		kInputPanel.setVisible(true);
@@ -275,14 +154,16 @@ public class PredictionConfigurePanel extends Container {
 		c.gridy++;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.WEST;
-		
+
+		//use sub panel to place buttons beside each other
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
+		
 		//include button to submit prediction format and get result
 		JButton doneButton = new JButton("Done");
 		doneButton.addActionListener(new doneButtonListener());
 		panel.add(doneButton);
-	
+
 		//include button to cancel prediction
 		JButton cancelButon = new JButton("Cancel");
 		cancelButon.addActionListener(new CancelButtonListener());
@@ -293,57 +174,66 @@ public class PredictionConfigurePanel extends Container {
 	/**
 	 * adds a radio button to a selected button group and to the panel
 	 * 
-	 * @param radioButton the button to add to a ButtonGroup and JPanel
+	 * @param text the text of the button to add to a ButtonGroup and JPanel
 	 * @param buttonGroup the ButtonGroup to add the radio button to
 	 * @param panel the JPanel to add the radio button to
 	 */
-	private void addRadioButton(JRadioButton radioButton, ButtonGroup buttonGroup, JPanel panel){
+	private void addRadioButton(String text, ButtonGroup buttonGroup, JPanel panel){
+		JRadioButton radioButton = new JRadioButton(text);
 		buttonGroup.add(radioButton);
 		panel.add(radioButton);
 	}
-	
+
 	/**
 	 * adds a radio button to a selected button group and to the panel
 	 * 
-	 * @param radioButton the button to add to a ButtonGroup and JPanel
+	 * @param text the text of the button to add to a ButtonGroup and JPanel
 	 * @param buttonGroup the ButtonGroup to add the radio button to
 	 * @param panel the JPanel to add the radio button to
 	 * @param distanceFunction DistanceFunction that the radio button denotes
 	 */
-	private void addRadioButton(JRadioButton radioButton, ButtonGroup buttonGroup, JPanel panel, CompositeDistanceStrategy distanceFunction){
-		addRadioButton(radioButton, buttonGroup, panel);
-		compositeDistanceFunctionSelectionMap.put(radioButton.getText(), distanceFunction);
+	private void addRadioButton(String text, ButtonGroup buttonGroup, JPanel panel, CompositeDistanceStrategy distanceFunction){
+		addRadioButton(text, buttonGroup, panel);
+		compositeDistanceFunctionSelectionMap.put(text, distanceFunction);
 	}
 
 	/**
 	 * adds a radio button to a selected button group and to the panel
 	 * 
-	 * @param radioButton the button to add to a ButtonGroup and JPanel
+	 * @param text the text of the button to add to a ButtonGroup and JPanel
 	 * @param buttonGroup the ButtonGroup to add the radio button to
 	 * @param panel the JPanel to add the radio button to
 	 * @param distanceFunction DistanceFunction that the radio button denotes
 	 */
-	private void addRadioButton(JRadioButton radioButton, ButtonGroup buttonGroup, JPanel panel, SimpleDistanceStrategy distanceFunction){
-		addRadioButton(radioButton, buttonGroup, panel);
-		simpleDistanceFunctionSelectionMap.put(radioButton.getText(), distanceFunction);
+	private void addRadioButton(String text, ButtonGroup buttonGroup, JPanel panel, SimpleDistanceStrategy distanceFunction){
+		addRadioButton(text, buttonGroup, panel);
+		simpleDistanceFunctionSelectionMap.put(text, distanceFunction);
 	}
 
 	/**
 	 * adds a radio button to a selected button group and to the panel
 	 * 
-	 * @param radioButton the button to add to a ButtonGroup and JPanel
+	 * @param text the text of the button to add to a ButtonGroup and JPanel
 	 * @param buttonGroup the ButtonGroup to add the radio button to
 	 * @param panel the JPanel to add the radio button to
 	 * @param distanceFunction DistanceFunction that the radio button denotes
 	 */
-	private void addRadioButton(JRadioButton radioButton, ButtonGroup buttonGroup, JPanel panel, ExampleDistanceStrategy distanceFunction){
-		addRadioButton(radioButton, buttonGroup, panel);
-		exampleDistanceFunctionSelectionMap.put(radioButton.getText(), distanceFunction);
+	private void addRadioButton(String text, ButtonGroup buttonGroup, JPanel panel, ExampleDistanceStrategy distanceFunction){
+		addRadioButton(text, buttonGroup, panel);
+		exampleDistanceFunctionSelectionMap.put(text, distanceFunction);
 	}
 	
+	private void returnToDisplayContents(){
+		//update the problem set in the frame
+		m.setProblem(problem);
+		m.setPreferredSize(new Dimension(400, 648));
+		//return to the main display of problem info
+		m.setContentPane(new DisplayProblemContents(m));
+		m.pack();
+	}
+
 	/*listener to predict output based on customizations given*/
 	private class doneButtonListener implements ActionListener{
-		
 		public void actionPerformed(ActionEvent e) {
 			int k;
 			//try to get k value from user
@@ -366,8 +256,7 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select an example distance function to use");
 				return;
 			}
-			
-			
+
 			//get the selected point distance function user specified
 			String selectedPointDistanceFunction = getSelectedButton(pointDistanceFunctionButtonGroup);
 			//if no button is selected, show error message
@@ -383,7 +272,6 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a character distance function to use");
 				return;
 			}
-			
 
 			//get the selected double distance function user specified
 			String selectedDoubleDistanceFunction = getSelectedButton(doubleDistanceFunctionButtonGroup);
@@ -392,7 +280,6 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a double distance function to use");
 				return;
 			}
-			
 
 			//get the selected integer distance function user specified
 			String selectedIntegerDistanceFunction = getSelectedButton(integerDistanceFunctionButtonGroup);
@@ -401,7 +288,7 @@ public class PredictionConfigurePanel extends Container {
 				JOptionPane.showMessageDialog(null, "Error: Please select a integer distance function to use");
 				return;
 			}
-			
+
 			//get the selected String distance function user specified
 			String selectedStringDistanceFunction = getSelectedButton(stringDistanceFunctionButtonGroup);
 			//if no button is selected, show error message
@@ -415,7 +302,7 @@ public class PredictionConfigurePanel extends Container {
 					compositeDistanceFunctionSelectionMap.get(selectedPointDistanceFunction), simpleDistanceFunctionSelectionMap.get(selectedCharacterDistanceFunction),
 					simpleDistanceFunctionSelectionMap.get(selectedDoubleDistanceFunction), simpleDistanceFunctionSelectionMap.get(selectedIntegerDistanceFunction),
 					simpleDistanceFunctionSelectionMap.get(selectedStringDistanceFunction));
-			
+
 			//return to main display
 			returnToDisplayContents();
 			m.setConfigured(true);
@@ -430,7 +317,6 @@ public class PredictionConfigurePanel extends Container {
 		private String getSelectedButton(ButtonGroup buttonGroup){
 			for(Enumeration<AbstractButton> buttonList = buttonGroup.getElements(); buttonList.hasMoreElements();){
 				AbstractButton button = buttonList.nextElement();
-
 				if(button.isSelected())
 					return button.getText();
 			}
@@ -438,15 +324,6 @@ public class PredictionConfigurePanel extends Container {
 		}
 	}
 
-	private void returnToDisplayContents(){
-		//update the problem set in the frame
-		m.problem = problem;
-		m.setPreferredSize(new Dimension(400, 648));
-		//return to the main display of problem info
-		m.setContentPane(new DisplayProblemContents(m));
-		m.pack();
-	}
-	
 	/*action listener for cancelling operation*/
 	private class CancelButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {

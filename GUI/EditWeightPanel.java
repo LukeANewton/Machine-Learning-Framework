@@ -6,15 +6,12 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-
-
 /**
  * This class contains the contents and functionality to edit the weights of a problem set
  * 
  * @author luke newton, madelyn krasnay
  */
-public class EditWeightPanel extends UserInputPanel {
-	//serialized ID
+public class EditWeightPanel extends UserInputContentPanel {
 	private static final long serialVersionUID = 6041499093779519108L;
 	
 	/**
@@ -24,8 +21,7 @@ public class EditWeightPanel extends UserInputPanel {
 	 */
 	public EditWeightPanel(MachineLearningFramework m){
 		super(m);
-		
-		createContent(m.problem.getNumberOfFields());
+		createContent(m.getProblem().getNumberOfFields());
 	}
 	
 	/**
@@ -33,20 +29,19 @@ public class EditWeightPanel extends UserInputPanel {
 	 * 
 	 * @param n the number of attribute/features in a training/test example
 	 */
-	protected void createContent(int n){
+	private void createContent(int n){
 		//create the list of texts for title to go with each panel
 		ArrayList<String> panelTitles = new ArrayList<>();
-		for(int i = 0; i < n; i++){
+		for(int i = 0; i < n; i++)
 			panelTitles.add("Enter weight for " + problem.getFieldName(i) + " field: ");
-		}
 		
 		//call to super create content
 		super.createContent(n, panelTitles);
 		
 		/*fill the contents of the panels with the current weights of that feature*/
-		for(int i = 0; i < panels.size(); i++){	
+		int numPanels = panels.size();
+		for(int i = 0; i < numPanels; i++)
 			panels.get(i).setTextFieldText(Double.toString(problem.getWeight(i)));
-		}
 		
 		doneButton.addActionListener(new AcceptWeightsListener());
 	}
@@ -75,12 +70,9 @@ public class EditWeightPanel extends UserInputPanel {
 					return;
 				}
 			}
-			
 			//if all weights are valid, apply them to problem and return to data display
 			if(validWeights){
-				//set weights in problem with new weights inputed
 				problem.setWeights(weights);
-				
 				returnToDisplayScreen(e);
 			}
 		}

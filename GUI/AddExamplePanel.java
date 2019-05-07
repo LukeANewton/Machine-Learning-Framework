@@ -12,19 +12,17 @@ import problemComponents.Feature;
  * @author luke newton
  */
 public class AddExamplePanel extends ExampleModificationPanel {
-	//serializable ID
 	private static final long serialVersionUID = -6068066953807677256L;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param exampleType specifies whether we are adding a training example or test example
-	 * @param problem the problem set we are working with
+	 * @param m the parent JFrame this panel will be contained in
 	 */
 	public AddExamplePanel(ExampleType exampleType, MachineLearningFramework m){
 		super(exampleType, m);
-
-		createContent(m.problem.getNumberOfFields());
+		createContent(m.getProblem().getNumberOfFields());
 	}
 
 	/**
@@ -52,7 +50,6 @@ public class AddExamplePanel extends ExampleModificationPanel {
 			} else if(exampleType == ExampleType.TrainingExample){
 				problem.addTrainingExample(dataElements);
 			}
-			
 			returnToDisplayScreen(e);
 		}
 	}

@@ -32,52 +32,40 @@ import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
  * function.
  * 
  * @author luke newton, madelyn krasnay
- *
  */
 public class MachineLearningFramework  extends JFrame{
-	//serializable ID
 	private static final long serialVersionUID = -7251613294872651907L;
 	//the problem est we are working with
-	protected Problem problem;
+	private Problem problem;
 	//the index value of the  most recently selected training example
-	protected int selectedTrainingExample;
+	private int selectedTrainingExample;
 	//the index value of the  most recently selected test example
-	protected int selectedTestExample;
+	private int selectedTestExample;
 	//indicator of wether a problem has been created/loaded yet
 	private boolean createdProblem;
 	//indicatr of whether prediciton parameters has been configured yet
 	private boolean configuredPrediction;
 	//the number of nearest neighbors to find in prediction
 	private int k;
+	//the example strategy to use in predictions
 	private ExampleDistanceStrategy exStrat;
+	//the composite strategy to use in predictions
 	private CompositeDistanceStrategy compStrat;
+	//the character distance strategy to use in predictions
 	private SimpleDistanceStrategy charStrat;
+	//the string distance strategy to use in predictions
 	private SimpleDistanceStrategy stringStrat;
+	//the integer distance strategy to use in predictions
 	private SimpleDistanceStrategy intStrat;
+	//the double distance strategy to use in predictions
 	private SimpleDistanceStrategy doubleStrat;
 
-	public void setExampleStrategy(ExampleDistanceStrategy exStrat) {
-		this.exStrat = exStrat;
-	}
-
-	public void setCompositeStrategy(CompositeDistanceStrategy compStrat) {
-		this.compStrat = compStrat;
-	}
-
-	public void setCharacterStrategy(SimpleDistanceStrategy charStrat) {
-		this.charStrat = charStrat;
-	}
-
-	public void setStringStrategy(SimpleDistanceStrategy stringStrat) {
-		this.stringStrat = stringStrat;
-	}
-
-	public void setIntegerStrategy(SimpleDistanceStrategy intStrat) {
-		this.intStrat = intStrat;
-	}
-
-	public void setDoubleStrategy(SimpleDistanceStrategy doubleStrat) {
-		this.doubleStrat = doubleStrat;
+	/**main function to run program*/
+	public static void main(String[] args) {
+		MachineLearningFramework m = new MachineLearningFramework();
+		//default contents will be displaying the problem examples	
+		m.setContentPane(new DisplayProblemContents(m));
+		m.pack();
 	}
 
 	/**Constructor*/
@@ -94,19 +82,82 @@ public class MachineLearningFramework  extends JFrame{
 		makeFrame();
 	}
 
+	/**set indicator of whether a valid problem exists*/
 	public void setCreatedProblem(boolean createdProblem) {
 		this.createdProblem = createdProblem;
 	}
 
-
+	/**set indicator of whether the current problem has been configured*/
 	public void setConfigured(boolean b) {
 		configuredPrediction = b;
 	}
 
+	/**set the number of nearest neighbors to use in a prediction*/
 	public void setK(int k){
 		this.k = k;
 	}
 
+	/*set the example distance strategy to use in predictions*/
+	public void setExampleStrategy(ExampleDistanceStrategy exStrat) {
+		this.exStrat = exStrat;
+	}
+
+	/**set the composite distance strategy to use in predicitons*/
+	public void setCompositeStrategy(CompositeDistanceStrategy compStrat) {
+		this.compStrat = compStrat;
+	}
+
+	/**set the character distacne strategy to use in predicitons*/
+	public void setCharacterStrategy(SimpleDistanceStrategy charStrat) {
+		this.charStrat = charStrat;
+	}
+
+	/**set the string distance strategy to use in predictions*/
+	public void setStringStrategy(SimpleDistanceStrategy stringStrat) {
+		this.stringStrat = stringStrat;
+	}
+
+	/**set the integer distance strategy to use in predictions*/
+	public void setIntegerStrategy(SimpleDistanceStrategy intStrat) {
+		this.intStrat = intStrat;
+	}
+
+	/**set the double distance strategy to use in predictions*/
+	public void setDoubleStrategy(SimpleDistanceStrategy doubleStrat) {
+		this.doubleStrat = doubleStrat;
+	}
+
+	/**returns the current problem set*/
+	public Problem getProblem(){
+		return problem;
+	}
+
+	/**set the current problem set*/
+	public void setProblem(Problem problem) {
+		this.problem = problem;
+	}
+
+	/**returns the index of the selected training example in its JList display*/
+	public int getSelectedTrainingExample() {
+		return selectedTrainingExample;
+	}
+
+	/**returns the index of the selected test example in its JList display*/
+	public int getSelectedTestExample() {
+		return selectedTestExample;
+	}
+
+	/**sets the index of the selected training example*/
+	public void setSelectedTrainingExample(int selectedTrainingExample) {
+		this.selectedTrainingExample = selectedTrainingExample;
+	}
+
+	/**setts the index of the selected test example*/
+	public void setSelectedTestExample(int selectedTestExample) {
+		this.selectedTestExample = selectedTestExample;
+	}
+
+	/**sets all the strategies used in predictions to the passed strategies*/
 	public void configurePrediction(int k, ExampleDistanceStrategy exStrat, CompositeDistanceStrategy compStrat,
 			SimpleDistanceStrategy charStrat, SimpleDistanceStrategy doubleStrat, SimpleDistanceStrategy intStrat, 
 			SimpleDistanceStrategy stringStrat){
@@ -119,6 +170,7 @@ public class MachineLearningFramework  extends JFrame{
 		this.stringStrat = stringStrat;
 	}
 
+	/**toggles the ability to select items in the menu bar*/
 	public void setMenuBarEnabled(boolean value){
 		//re enable all menu items
 		JMenuBar menuBar = getJMenuBar();
@@ -127,14 +179,6 @@ public class MachineLearningFramework  extends JFrame{
 			for(int j = 0; j < items; j++)
 				menuBar.getMenu(i).getItem(j).setEnabled(value);
 		}
-	}
-
-	/**main function to run program*/
-	public static void main(String[] args) {
-		MachineLearningFramework m = new MachineLearningFramework();
-		//default contents will be displaying the problem examples	
-		m.setContentPane(new DisplayProblemContents(m));
-		m.pack();
 	}
 
 	/**set up the frame options and contents of the frame*/
@@ -148,82 +192,50 @@ public class MachineLearningFramework  extends JFrame{
 		setVisible(true);
 	}
 
+	/**adds a menu item to the specified menu
+	 * 
+	 * @param text the label of the new menu item
+	 * @param menu the menu to add the item to
+	 * @param activity the ActionListener to trigger when the item is selected
+	 */
+	private void addMenuItem(String text, JMenu menu, ActionListener activity){
+		JMenuItem menuItem = new JMenuItem(text);
+		menuItem.addActionListener(activity);
+		menu.add(menuItem);
+	}
+
 	/**create the menu bar for the frame*/
 	private void makeMenuBar(){
 		//the menu bar
 		JMenuBar menuBar = new JMenuBar();
+
 		//create problem menu
 		JMenu problemMenu = new JMenu("Problem");
-
-		/*add options to problem menu*/
-		JMenuItem createProblem = new JMenuItem("create");
-		createProblem.addActionListener(new CreateProblemListener());
-		problemMenu.add(createProblem);
-
-		JMenuItem saveProblem = new JMenuItem("save");
-		saveProblem.addActionListener(new SaveProblemListener());
-		problemMenu.add(saveProblem);
-
-		JMenuItem loadProblem = new JMenuItem("load");
-		loadProblem.addActionListener(new LoadProblemListener());
-		problemMenu.add(loadProblem);
-
-		JMenuItem editWeights = new JMenuItem("edit weights");
-		editWeights.addActionListener(new EditWeightListener());
-		problemMenu.add(editWeights);
-
-		//add problem menu to menu bar
+		addMenuItem("create", problemMenu, new CreateProblemListener());
+		addMenuItem("save", problemMenu, new SaveProblemListener());
+		addMenuItem("load", problemMenu, new LoadProblemListener());
+		addMenuItem("edit weights", problemMenu, new EditWeightListener());
 		menuBar.add(problemMenu);
 
 		//create training example menu
 		JMenu trainingExampleMenu = new JMenu("training example");
-
-		/*add options to training example menu*/
-		JMenuItem addTrainingExample = new JMenuItem("add");
-		addTrainingExample.addActionListener(new AddTrainingExampleListener());
-		trainingExampleMenu.add(addTrainingExample);
-
-		JMenuItem removeTrainingExample = new JMenuItem("remove");
-		removeTrainingExample.addActionListener(new RemoveTrainingExampleListener());
-		trainingExampleMenu.add(removeTrainingExample);
-
-		JMenuItem editTrainingExample = new JMenuItem("edit");
-		editTrainingExample.addActionListener(new EditTrainingExampleListener());
-		trainingExampleMenu.add(editTrainingExample);
-		//add training example menu to menu bar
+		addMenuItem("add", trainingExampleMenu, new AddTrainingExampleListener());
+		addMenuItem("remove", trainingExampleMenu, new RemoveTrainingExampleListener());
+		addMenuItem("edit", trainingExampleMenu, new EditTrainingExampleListener());
 		menuBar.add(trainingExampleMenu);
 
 		//create test example menu
 		JMenu testExampleMenu = new JMenu("test example");
-
-		/*add options to test example menu*/
-		JMenuItem addTestExample = new JMenuItem("add");
-		addTestExample.addActionListener(new AddTestExampleListener());
-		testExampleMenu.add(addTestExample);
-
-		JMenuItem removeTestExample = new JMenuItem("remove");
-		removeTestExample.addActionListener(new RemoveTestExampleListener());
-		testExampleMenu.add(removeTestExample);
-
-		JMenuItem editTestExample = new JMenuItem("edit");
-		editTestExample.addActionListener(new EditTestExampleListener());
-		testExampleMenu.add(editTestExample);
-
-		//add test example menu to menu bar
+		addMenuItem("add", testExampleMenu, new AddTestExampleListener());
+		addMenuItem("remove", testExampleMenu, new RemoveTestExampleListener());
+		addMenuItem("edit", testExampleMenu, new EditTestExampleListener());
 		menuBar.add(testExampleMenu);
 
+		//create prediction menu
 		JMenu predictMenu = new JMenu("Prediction");
-		JMenuItem configPrediction = new JMenuItem("configure predictions");
-		configPrediction.addActionListener(new PredictConfigListener());
-		predictMenu.add(configPrediction);
-
-		JMenuItem predictTestExample = new JMenuItem("make prediction");
-		predictTestExample.addActionListener(new PredictTestExampleListener());
-		predictMenu.add(predictTestExample);
+		addMenuItem("configure predictions", predictMenu, new PredictConfigListener());
+		addMenuItem("make prediction", predictMenu, new PredictTestExampleListener());
 		menuBar.add(predictMenu);
-
-		//set menu bar visible
-		menuBar.setVisible(true);
 
 		setJMenuBar(menuBar);
 	}
@@ -260,8 +272,13 @@ public class MachineLearningFramework  extends JFrame{
 				JOptionPane.showMessageDialog(null, "Error: Please enter a valid positive integer");
 			}      
 		} while(numOfFeatures <= 0);
-
 		return numOfFeatures;
+	}
+
+	/**obtains the parent JFrame from a JMenuItem*/
+	private MachineLearningFramework getWindowFromMenuItem(JMenuItem item){
+		JPopupMenu parent = (JPopupMenu)item.getParent();
+		return (MachineLearningFramework)SwingUtilities.getWindowAncestor(parent.getInvoker());
 	}
 
 	/**action listener for creating a new problem set*/
@@ -269,14 +286,9 @@ public class MachineLearningFramework  extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			int numFeatures = askForNumberOfFeatures();
 			if(numFeatures > 0){
-				JMenuItem source = (JMenuItem)e.getSource();
-				JPopupMenu parent = (JPopupMenu)source.getParent();
-				MachineLearningFramework c =  (MachineLearningFramework)SwingUtilities.getWindowAncestor(parent.getInvoker());
-
-				setContentPane(new CreateProblemPanel(numFeatures, c));
+				setContentPane(new CreateProblemPanel(numFeatures, getWindowFromMenuItem((JMenuItem)e.getSource())));
 				pack();
 			}
-
 		}
 	}
 
@@ -284,11 +296,7 @@ public class MachineLearningFramework  extends JFrame{
 	private class EditWeightListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				JMenuItem source = (JMenuItem)e.getSource();
-				JPopupMenu parent = (JPopupMenu)source.getParent();
-				MachineLearningFramework c =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
-
-				setContentPane(new EditWeightPanel(c));
+				setContentPane(new EditWeightPanel(getWindowFromMenuItem((JMenuItem)e.getSource())));
 				pack();
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -302,11 +310,8 @@ public class MachineLearningFramework  extends JFrame{
 			if(createdProblem){
 				try {
 					JFileChooser jfc = new JFileChooser();
-					JMenuItem source = (JMenuItem)e.getSource();
-					JPopupMenu parent = (JPopupMenu)source.getParent();
-					MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+					int result = jfc.showSaveDialog(getWindowFromMenuItem((JMenuItem)e.getSource()));
 
-					int result = jfc.showSaveDialog(m);
 					if(result == JFileChooser.APPROVE_OPTION){
 						//ensure all strategies are updated
 						problem.setStrategies(exStrat, compStrat, charStrat, doubleStrat, intStrat, stringStrat);
@@ -327,14 +332,12 @@ public class MachineLearningFramework  extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			try {
 				JFileChooser jfc = new JFileChooser();
-				JMenuItem source = (JMenuItem)e.getSource();
-				JPopupMenu parent = (JPopupMenu)source.getParent();
-				MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
+				int result = jfc.showOpenDialog(getWindowFromMenuItem((JMenuItem)e.getSource()));
 
-				int result = jfc.showOpenDialog(m);
 				if(result == JFileChooser.APPROVE_OPTION){
 					problem.serializedImport(jfc.getSelectedFile().getAbsolutePath());
 					createdProblem = true;
+					configuredPrediction = false;
 				}
 			} catch (Exception e1) {
 				System.out.println(e1);
@@ -342,7 +345,7 @@ public class MachineLearningFramework  extends JFrame{
 				return;
 			} 
 
-			//if the contetns of the problem is currently being displayed, it need to be updated to show import
+			//if the contents of the problem is currently being displayed, it need to be updated to show import
 			if(getContentPane() instanceof DisplayProblemContents){
 				((DisplayProblemContents)getContentPane()).updateProblem(problem);
 				pack();
@@ -354,11 +357,7 @@ public class MachineLearningFramework  extends JFrame{
 	private class AddTrainingExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				JMenuItem source = (JMenuItem)e.getSource();
-				JPopupMenu parent = (JPopupMenu)source.getParent();
-				MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
-
-				setContentPane(new AddExamplePanel(ExampleType.TrainingExample, m));
+				setContentPane(new AddExamplePanel(ExampleType.TrainingExample, getWindowFromMenuItem((JMenuItem)e.getSource())));
 				pack();
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -370,11 +369,7 @@ public class MachineLearningFramework  extends JFrame{
 	private class AddTestExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				JMenuItem source = (JMenuItem)e.getSource();
-				JPopupMenu parent = (JPopupMenu)source.getParent();
-				MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
-
-				setContentPane(new AddExamplePanel(ExampleType.TestExample, m));
+				setContentPane(new AddExamplePanel(ExampleType.TestExample, getWindowFromMenuItem((JMenuItem)e.getSource())));
 				pack();	
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -385,18 +380,12 @@ public class MachineLearningFramework  extends JFrame{
 	/**Action listener to edit a training example in the problem set*/
 	private class EditTrainingExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if(createdProblem){
-				if(selectedTrainingExample == -1){
-					JOptionPane.showMessageDialog(null, "Error: Please select a training example first");
-				}else{
-					JMenuItem source = (JMenuItem)e.getSource();
-					JPopupMenu parent = (JPopupMenu)source.getParent();
-					MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
-
-					setContentPane(new EditExamplePanel(ExampleType.TrainingExample, m, selectedTrainingExample));
-					pack();
-				}
-			}else{
+			if(createdProblem && selectedTrainingExample >= 0){
+				setContentPane(new EditExamplePanel(ExampleType.TrainingExample, getWindowFromMenuItem((JMenuItem)e.getSource()), selectedTrainingExample));
+				pack();
+			}else if(selectedTrainingExample == -1){
+				JOptionPane.showMessageDialog(null, "Error: Please select a training example first");
+			}else if (!createdProblem){
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
 		}
@@ -405,18 +394,12 @@ public class MachineLearningFramework  extends JFrame{
 	/**Action listener to edit a test example in the problem set*/
 	private class EditTestExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if(createdProblem){
-				if(selectedTestExample == -1){
-					JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
-				}else{
-					JMenuItem source = (JMenuItem)e.getSource();
-					JPopupMenu parent = (JPopupMenu)source.getParent();
-					MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
-
-					setContentPane(new EditExamplePanel(ExampleType.TestExample, m, selectedTestExample));
-					pack();
-				}
-			}else{
+			if(createdProblem && selectedTestExample >= 0){
+				setContentPane(new EditExamplePanel(ExampleType.TestExample, getWindowFromMenuItem((JMenuItem)e.getSource()), selectedTestExample));
+				pack();
+			}else if(selectedTestExample == -1){
+				JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
+			}else if (!createdProblem){
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
 		}
@@ -425,17 +408,15 @@ public class MachineLearningFramework  extends JFrame{
 	/**Action listener to remove a training example from the problem set*/
 	private class RemoveTrainingExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if(createdProblem){	
-				if(selectedTrainingExample == -1){
-					JOptionPane.showMessageDialog(null, "Error: Please select a training example first");
-				}else{
-					//set contents to remove a training example
-					problem.removeTrainingExample(selectedTrainingExample);
-					selectedTrainingExample = -1;
-					((DisplayProblemContents)getContentPane()).updateProblem(problem);
-					pack();
-				}
-			}else{
+			if(createdProblem && selectedTrainingExample >= 0){
+				//set contents to remove a training example
+				problem.removeTrainingExample(selectedTrainingExample);
+				selectedTrainingExample = -1;
+				((DisplayProblemContents)getContentPane()).updateProblem(problem);
+				pack();
+			}else if(selectedTrainingExample == -1){
+				JOptionPane.showMessageDialog(null, "Error: Please select a training example first");
+			}else if (!createdProblem){
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
 		}
@@ -444,17 +425,15 @@ public class MachineLearningFramework  extends JFrame{
 	/**Action listener to remove a test example from the problem set*/
 	private class RemoveTestExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if(createdProblem){
-				if(selectedTestExample == -1){
-					JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
-				}else{
-					//set contents to remove a test example
-					problem.removeTestExample(selectedTestExample);
-					selectedTestExample = -1;
-					((DisplayProblemContents)getContentPane()).updateProblem(problem);
-					pack();
-				}		
-			}else{
+			if(createdProblem && selectedTestExample >= 0){
+				//set contents to remove a test example
+				problem.removeTestExample(selectedTestExample);
+				selectedTestExample = -1;
+				((DisplayProblemContents)getContentPane()).updateProblem(problem);
+				pack();
+			}else if(selectedTestExample == -1){
+				JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
+			}else if (!createdProblem){
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
 		}
@@ -464,11 +443,7 @@ public class MachineLearningFramework  extends JFrame{
 	private class PredictConfigListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				JMenuItem source = (JMenuItem)e.getSource();
-				JPopupMenu parent = (JPopupMenu)source.getParent();
-				MachineLearningFramework m =  (MachineLearningFramework)SwingUtilities.getRoot(parent.getInvoker());
-
-				setContentPane(new PredictionConfigurePanel(m, selectedTestExample));
+				setContentPane(new PredictionConfigurePanel(getWindowFromMenuItem((JMenuItem)e.getSource()), selectedTestExample));
 				pack();
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
@@ -479,57 +454,53 @@ public class MachineLearningFramework  extends JFrame{
 	/**Action listener to predict an output value for a test example int the problem set*/
 	private class PredictTestExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if(createdProblem){
-				if(configuredPrediction){
-					if(selectedTestExample == -1){
-						JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
-					}else{
-						//ensure all examples have the same distance metrics
-						problem.setStrategies(exStrat, compStrat, charStrat, doubleStrat, intStrat, stringStrat);
-						
-						//make prediction
-						Object prediction = Prediction.getPrediction(k, problem, selectedTestExample);
+			if(createdProblem && configuredPrediction && selectedTestExample >= 0){
+				//ensure all examples have the same distance metrics
+				problem.setStrategies(exStrat, compStrat, charStrat, doubleStrat, intStrat, stringStrat);
 
-						//ask the user if they want to compare the predicted value against a known value
-						int result = JOptionPane.showConfirmDialog(null, "prediction result is " + prediction.toString() + ", do you want to compare against a known value?",
-								"prediction dialog box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+				//make prediction
+				Object prediction = Prediction.getPrediction(k, problem, selectedTestExample);
 
-						/*if user says yes, get a value from them and update the accuracy*/
-						if(result == JOptionPane.YES_OPTION){
-							JPanel initPanel = new JPanel();
-							initPanel.add(new JLabel("Enter known output value:"));
-							JTextField numOfFeaturesField = new JTextField(20);
-							initPanel.add(numOfFeaturesField);
+				//ask the user if they want to compare the predicted value against a known value
+				int result = JOptionPane.showConfirmDialog(null, "prediction result is " + prediction.toString() + ", do you want to compare against a known value?",
+						"prediction dialog box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-							//get known ouput from user and parse
-							SimpleFeature knownOutput = SimpleFeature.parseSimpleFeature(
-									JOptionPane.showInputDialog(initPanel, "Enter known output value:", "Known value", JOptionPane.PLAIN_MESSAGE)
-									);
-							//update accuracy
-							problem.updateAccuracy(prediction, knownOutput.getContents());
-							//display update accuracy
-							JOptionPane.showMessageDialog(null, "Current prediction accuracy is " + problem.getPredictionError().getAccuracy());
-						}
+				/*if user says yes, get a value from them and update the accuracy*/
+				if(result == JOptionPane.YES_OPTION){
+					JPanel initPanel = new JPanel();
+					initPanel.add(new JLabel("Enter known output value:"));
+					JTextField numOfFeaturesField = new JTextField(20);
+					initPanel.add(numOfFeaturesField);
 
-						//ask the user if they want to replace the output of test example in problem with this prediction
-						result = JOptionPane.showConfirmDialog(null, "prediction result is " + prediction.toString() + ", do you want to overwrite \nthe example you predicted for to contain this result?",
-								"prediction dialog box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-						/*if user says yes, add that prediction to the test example*/
-						if(result == JOptionPane.YES_OPTION){
-							//the the current test exmaple
-							ArrayList<Feature> dataElements = problem.getTestExample(selectedTestExample).getFields();
-							//set the output of the test example to the predicted value
-							dataElements.set(dataElements.size() - 1, CompositeFeature.parseFeature(prediction.toString()));
-							//replace the test example in the problem with updated one
-							problem.editTestExample(selectedTestExample, dataElements);
-						}	
-					}	
-				}else{
-					JOptionPane.showMessageDialog(null, "Error: Please configure the prediction first");
+					//get known ouput from user and parse
+					SimpleFeature knownOutput = SimpleFeature.parseSimpleFeature(
+							JOptionPane.showInputDialog(initPanel, "Enter known output value:", "Known value", JOptionPane.PLAIN_MESSAGE)
+							);
+					//update accuracy
+					problem.updateAccuracy(prediction, knownOutput.getContents());
+					//display update accuracy
+					JOptionPane.showMessageDialog(null, "Current prediction accuracy is " + problem.getPredictionError().getAccuracy());
 				}
-			}else{
+
+				//ask the user if they want to replace the output of test example in problem with this prediction
+				result = JOptionPane.showConfirmDialog(null, "prediction result is " + prediction.toString() + ", do you want to overwrite \nthe example you predicted for to contain this result?",
+						"prediction dialog box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+				/*if user says yes, add that prediction to the test example*/
+				if(result == JOptionPane.YES_OPTION){
+					//the the current test exmaple
+					ArrayList<Feature> dataElements = problem.getTestExample(selectedTestExample).getFields();
+					//set the output of the test example to the predicted value
+					dataElements.set(dataElements.size() - 1, CompositeFeature.parseFeature(prediction.toString()));
+					//replace the test example in the problem with updated one
+					problem.editTestExample(selectedTestExample, dataElements);
+				}
+			}else if(!createdProblem){
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
+			}else if(!configuredPrediction){
+				JOptionPane.showMessageDialog(null, "Error: Please configure the prediction first");
+			}else if(selectedTestExample == -1){
+				JOptionPane.showMessageDialog(null, "Error: Please select a test example first");
 			}
 		}
 	}

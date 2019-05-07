@@ -1,18 +1,17 @@
 package GUI;
 
-
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,15 +24,14 @@ import problemComponents.Problem;
  * 
  * @author luke newton, madelyn krasnay
  */
-public class DisplayProblemContents extends Container {
-	//serialized ID
+public class DisplayProblemContents extends JPanel {
 	private static final long serialVersionUID = -5170428175418141225L;
 	//current problem set working with
 	private Problem problem;
 	//list to display training examples
-	protected JList<ArrayList<Feature>> trainingExamples;
+	private JList<ArrayList<Feature>> trainingExamples;
 	//list to display test examples
-	protected JList<ArrayList<Feature>> testExamples;
+	private JList<ArrayList<Feature>> testExamples;
 	//the JFrame this will be displayed in
 	private MachineLearningFramework mainWindow;
 
@@ -44,14 +42,11 @@ public class DisplayProblemContents extends Container {
 	 */
 	public DisplayProblemContents(MachineLearningFramework m){
 		super();
-		problem = m.problem;
+		problem = m.getProblem();
 		mainWindow = m;
-
-		mainWindow.selectedTrainingExample = -1;
-		mainWindow.selectedTestExample = -1;
-
+		mainWindow.setSelectedTrainingExample(-1);
+		mainWindow.setSelectedTestExample(-1);
 		mainWindow.setMenuBarEnabled(true);
-		
 		createContent();
 	}
 
@@ -61,36 +56,38 @@ public class DisplayProblemContents extends Container {
 		setLayout(new GridLayout(2, 1));
 
 		//create JList for training examples
-		JScrollPane scrollPane = new JScrollPane();
 		DefaultListModel<ArrayList<Feature>> features = new DefaultListModel<>();
-		for(int i = 0; i < problem.getNumberOfTrainingExamples(); i++)
+		int numTrainingExamples =  problem.getNumberOfTrainingExamples();
+		for(int i = 0; i < numTrainingExamples; i++)
 			features.addElement(problem.getTrainingExample(i).getFields());
 		trainingExamples = new JList<ArrayList<Feature>>(features);
 		trainingExamples.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		trainingExamples.addMouseListener(new DeselectTrainingExampleListener());
-		scrollPane.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createEmptyBorder(10, 10, 10, 10),
-				BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
-						"Training Examples", TitledBorder.LEFT, TitledBorder.TOP)));
-		scrollPane.setViewportView(trainingExamples);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		add(scrollPane);
-
+		trainingExamples.addMouseListener(new DeselectTrainingExampleListener());	
+		
 		//create JList for test examples
-		scrollPane = new JScrollPane();
 		features = new DefaultListModel<>();
-		for(int i = 0; i < problem.getNumberOfTestExamples(); i++)
+		int numberTestExamples = problem.getNumberOfTestExamples();
+		for(int i = 0; i < numberTestExamples; i++)
 			features.addElement(problem.getTestExample(i).getFields());
 		testExamples = new JList<ArrayList<Feature>>(features);
 		testExamples.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		testExamples.addMouseListener(new DeselectTestExampleListener());
+
+		//add JLists to panel
+		add(buildScrollableExampleList(trainingExamples, "Training Examples"));
+		add(buildScrollableExampleList(testExamples, "Test Examples"));
+	}
+	
+	/**takes a JList and wraps it in a scrollable panel with raised border*/
+	private JScrollPane buildScrollableExampleList(JList<ArrayList<Feature>> list, String title){
+		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(10, 10, 10, 10),
 				BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
-						"Test Examples", TitledBorder.LEFT, TitledBorder.TOP)));
-		scrollPane.setViewportView(testExamples);
+						title, TitledBorder.LEFT, TitledBorder.TOP)));
+		scrollPane.setViewportView(list);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		add(scrollPane);
+		return scrollPane;
 	}
 
 	/**
@@ -102,44 +99,46 @@ public class DisplayProblemContents extends Container {
 		this.problem = problem;
 
 		DefaultListModel<ArrayList<Feature>> features = new DefaultListModel<>();
-		for(int i = 0; i < problem.getNumberOfTrainingExamples(); i++)
+		int numberTrainingExamples = problem.getNumberOfTrainingExamples();
+		for(int i = 0; i < numberTrainingExamples; i++)
 			features.addElement(problem.getTrainingExample(i).getFields());
 		trainingExamples.setModel(features);
 
 		features = new DefaultListModel<>();
-		for(int i = 0; i < problem.getNumberOfTestExamples(); i++)
+		int numTestExamples = problem.getNumberOfTestExamples();
+		for(int i = 0; i < numTestExamples; i++)
 			features.addElement(problem.getTestExample(i).getFields());
 		testExamples.setModel(features);
 	}
 
-	/*listener on Jlist for deselecting items*/
+	/*listener on Jlist for selecting/deselecting items*/
 	private class DeselectTrainingExampleListener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
 			JList<?> list = (JList<?>)e.getSource();
-			MachineLearningFramework c = (MachineLearningFramework)SwingUtilities.getRoot(list);
+			MachineLearningFramework m = (MachineLearningFramework)SwingUtilities.getRoot(list);
 			int index = list.locationToIndex(e.getPoint());
 
-			if(c.selectedTrainingExample == index){
+			if(m.getSelectedTrainingExample() == index){
 				list.clearSelection();
-				c.selectedTrainingExample = -1;
+				m.setSelectedTrainingExample(-1);
 			}else{
-				c.selectedTrainingExample = index;
+				m.setSelectedTrainingExample(index);
 			}
 		}
 	}
 
-	/*listener on Jlist for deselecting items*/
+	/*listener on Jlist for selecting/deselecting items*/
 	private class DeselectTestExampleListener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
 			JList<?> list = (JList<?>)e.getSource();
-			MachineLearningFramework c = (MachineLearningFramework)SwingUtilities.getRoot(list);
+			MachineLearningFramework m = (MachineLearningFramework)SwingUtilities.getRoot(list);
 			int index = list.locationToIndex(e.getPoint());
 
-			if(c.selectedTestExample == index){
+			if(m.getSelectedTestExample() == index){
 				list.clearSelection();
-				c.selectedTestExample = -1;
+				m.setSelectedTestExample(-1);
 			}else{
-				c.selectedTestExample = index;
+				m.setSelectedTestExample(index);
 			}
 		}
 	}
