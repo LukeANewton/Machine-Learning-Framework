@@ -29,7 +29,7 @@ import problemComponents.SimpleFeature;
 import simpleFeatureDistanceStrategies.SimpleDistanceStrategy;
 
 /**
- * This class is the frame which is displayed when the project is run. The fram contains a menu bar
+ * This class is the frame which is displayed when the project is run. The frame contains a menu bar
  * and a content pane which changes everytime an option in the menu bar is selected to do the required
  * function.
  * 
@@ -531,7 +531,6 @@ public class MachineLearningFramework  extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
 				int result;
-				
 				//warn user the task takes a while and needs lots of data
 				if(problem.getNumberOfTrainingExamples() < 100){
 					 result = JOptionPane.showConfirmDialog(null, "This process is best suited towards sets with large amounts of data, do you wish to continue?",

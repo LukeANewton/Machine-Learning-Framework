@@ -330,12 +330,6 @@ public class ProblemOptimization {
 			problem.updateAccuracy(prediction, problem.getTestExample(i).getUnknownFeature());
 		}
 		System.out.println("Accuracy: " + problem.getAccuracy());
-		try {
-			problem.serializedExport("adult-wage.data");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		System.out.println("done");
 	}
 
