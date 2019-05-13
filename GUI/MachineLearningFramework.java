@@ -265,6 +265,7 @@ public class MachineLearningFramework  extends JFrame{
 		addMenuItem("save", problemMenu, new SaveProblemListener());
 		addMenuItem("load", problemMenu, new LoadProblemListener());
 		addMenuItem("edit weights", problemMenu, new EditWeightListener());
+		addMenuItem("edit field names", problemMenu, new EditFieldNameListener());
 		menuBar.add(problemMenu);
 
 		//create training example menu
@@ -356,6 +357,19 @@ public class MachineLearningFramework  extends JFrame{
 			}
 		}
 	}
+	
+	/**action listener for editing the filed names of a problem*/
+	private class EditFieldNameListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			if(createdProblem){
+				setContentPane(new EditFieldNamePanel(getWindowFromMenuItem((JMenuItem)e.getSource())));
+				pack();
+			}else{
+				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
+			}
+		}
+	}
+
 
 	/**action listener to save the current contents of the problem*/
 	private class SaveProblemListener implements ActionListener{
