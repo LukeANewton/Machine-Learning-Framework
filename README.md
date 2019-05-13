@@ -3,7 +3,7 @@ machine learning framework originally created for SYSC3110 term project (Fall 20
 
 The original project used a kNN classification algorothim to predict values and contained basic UI for maniputlating the model. Recent updates by me (starting Winter 2019) have made a number of changes:
 
-- [x] vastly improved abilities and look of the GUI
+- [x] vastly improved abilities and organization of the GUI
 - [x] allowed saving/loading of multiple problem sets at specified pathnames
 - [x] refactored model for better and more consistent design
 - [x] general refactoring of code to greatly reduce code duplication
