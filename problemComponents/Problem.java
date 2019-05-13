@@ -93,6 +93,15 @@ public class Problem implements Serializable{
 		return predictionError.updateAccuracy(programPrediction, knownPrediction);
 	}
 	
+	/**return the accuracy of predictions made with this probem set*/
+	public double getAccuracy(){
+		return predictionError.getAccuracy();
+	}
+	
+	public void resetAccuracy(){
+		predictionError.resetAccuracy();
+	}
+	
 	/** return the position of the unknown field in a test example */
 	public int getUnknownTestFieldPosition(){
 		return testExamples.get(0).getUnknownFeaturePosition();
@@ -355,10 +364,10 @@ public class Problem implements Serializable{
 	 * 
 	 * @throws IOException
 	 */
-	public void serializedExport(String fieldName) throws IOException {
+	public void serializedExport(String path) throws IOException {
 		FileOutputStream fileOut = null;
 		try {
-			fileOut = new FileOutputStream(fieldName);
+			fileOut = new FileOutputStream(path);
 		} catch (FileNotFoundException e1) {
 			System.out.println("pathname not accessable");
 			System.exit(0);
@@ -378,10 +387,10 @@ public class Problem implements Serializable{
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	public void serializedImport(String fileName) throws IOException, ClassNotFoundException {
+	public void serializedImport(String path) throws IOException, ClassNotFoundException {
 		FileInputStream fileIn = null;
 		try {
-			fileIn = new FileInputStream(fileName);
+			fileIn = new FileInputStream(path);
 		} catch (FileNotFoundException e1) {
 			System.out.println("file not found");
 			System.exit(0);

@@ -6,11 +6,18 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
+import compositeFeatureDistanceStrategies.ChebyshevDistance;
+import exampleDistanceCombinationStrategies.SimpleSummation;
 import problemComponents.CompositeFeature;
 import problemComponents.Feature;
 import problemComponents.Problem;
+import problemComponents.SimpleFeature;
 import problemComponents.TestExample;
 import problemComponents.TrainingExample;
+import simpleFeatureDistanceStrategies.CharacterEqualsIgnoreCase;
+import simpleFeatureDistanceStrategies.DoubleAbsDistance;
+import simpleFeatureDistanceStrategies.IntegerAbsDistance;
+import simpleFeatureDistanceStrategies.StringLengthEquals;
 
 public class ProblemTest {
 	Problem problem;
@@ -262,6 +269,20 @@ public class ProblemTest {
     	problem.addTestExample(newPoint);
 		
 		assertTrue(problem.equals(problem));
+	}
+	
+	@Test
+	public void testStrategiesSetProperly(){
+		System.out.println(problem.getExampleCombinationStrategy().getClass());
+		System.out.println(((SimpleFeature)problem.getTrainingExample(0).getField(0)).getDistanceFunction().getClass());
+		System.out.println(((SimpleFeature)problem.getTrainingExample(0).getField(1)).getDistanceFunction().getClass());
+		
+		problem.setStrategies(new SimpleSummation(), new ChebyshevDistance(), new CharacterEqualsIgnoreCase(), 
+				new DoubleAbsDistance(), new IntegerAbsDistance(), new StringLengthEquals());
+		
+		System.out.println(problem.getExampleCombinationStrategy().getClass());
+		System.out.println(((SimpleFeature)problem.getTrainingExample(0).getField(0)).getDistanceFunction().getClass());
+		System.out.println(((SimpleFeature)problem.getTrainingExample(0).getField(1)).getDistanceFunction().getClass());
 	}
 }
 

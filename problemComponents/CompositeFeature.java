@@ -126,7 +126,7 @@ public class CompositeFeature implements Feature {
 	 * @return a feature object containing data parsed from the input string
 	 */
 	public static Feature parseFeature(String s){
-		if(s.equals(""))
+		if(s.equals("") || s.equals("?"))
 			return null;
 
 		//if enclosed in round brackets, its a composite feature

@@ -45,7 +45,7 @@ public class FeatureParseTest {
 		//uppercase character
 		assertTrue(CompositeFeature.parseFeature("W").getContents() instanceof Character);
 		//special character
-		assertTrue(CompositeFeature.parseFeature("?").getContents() instanceof Character);
+		assertTrue(CompositeFeature.parseFeature("^").getContents() instanceof Character);
 		//single character number should not be characters
 		assertFalse(CompositeFeature.parseFeature("6").getContents() instanceof Character);
 		//whitespace

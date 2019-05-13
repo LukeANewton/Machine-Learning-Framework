@@ -38,9 +38,14 @@ public class PredictionError implements Serializable{
 	 * @return the updated accuracy of our prediction model
 	 */
 	public double updateAccuracy(Object programPrediction, Object knownPrediction){
-		if(programPrediction.equals(knownPrediction))
+		if(programPrediction.toString().equals(knownPrediction.toString()))
 			numberOfCorrectPredicitons++;
 		numberOfPredictions++;
 		return getAccuracy();
+	}
+	
+	public void resetAccuracy(){
+		numberOfPredictions = 0;
+		numberOfCorrectPredicitons = 0;
 	}
 }
