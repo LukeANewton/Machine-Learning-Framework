@@ -1,19 +1,16 @@
 # MachineLearningFramework
-machine learning framework originally created for SYSC3110 term project.
+machine learning framework originally created for SYSC3110 term project (Fall 2017). This program's purpose is to estimate values for new data points, given old data that the user has inputted via a GUI. 
 
----------------------------------------------------------------------------------
-THE REMAINDER OF THIS DOCUMENT CONTAINS THE ORIGINAL README FOR THE TERM PROJECT
----------------------------------------------------------------------------------
+The original project used a kNN classification algorothim to predict values and contained basic UI for maniputlating the model. Recent updates by me (starting Winter 2019) have made a number of changes:
 
-***run runMe.java to run the non GUI code and see some examples run
+- [x] vastly improved abilities and look of the GUI
+- [x] allowed saving/loading of multiple problem sets at specified pathnames
+- [x] refactored model for better and more consistent design
+- [x] general refactoring of code to greatly reduce code duplication
+- [x] increased the number of distance metrics available to use for predictions
+- [x] introduced genetic algorithm to the project to allow the distance metrics and weightings to be optimized
 
 ***run MachineLearningFramework.java to run the GUI 
-
-This project contains a simple machine learning framework. This program's purpose is to estimate values for new data points, 
-given old data that the user has inputted via a non-graphical UI.
-
-running runMe.java will run both the house pricing example and the soccer example that were given in class, once with each point distance function we have provided to show difference in predictions.
-
 
 Team Members of Original Project
 -----------------------------------------------------------------------------------------------------------------------------------
@@ -23,9 +20,3 @@ Luke Newton
 Madelyn Krasnay
 
 Cameron Rushton
-
-
-Known bugs:
------------------------------------------------------------------------------------------------------------------------------------
-
--there is no checking to make sure that elements types are consistent among all examples, ClassCastExceptions will occur if types are not equal
