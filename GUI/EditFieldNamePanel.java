@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 /**
  * A panel to edit the field names of a problem set
  * 
@@ -36,11 +34,10 @@ public class EditFieldNamePanel extends UserInputContentPanel {
 		int numPanels = panels.size();
 		for(int i = 0; i < numPanels; i++){
 			String name = problem.getFieldName(i);
-			
+
 			if(name != null)
 				panels.get(i).setTextFieldText(name);
 		}
-
 		doneButton.addActionListener(new AcceptNamesListener());
 	}
 
@@ -48,13 +45,13 @@ public class EditFieldNamePanel extends UserInputContentPanel {
 	private class AcceptNamesListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			ArrayList<String> names = new ArrayList<>();
-			
+
 			for(int i = 0; i < panels.size(); i++)
 				names.add(panels.get(i).getInput());
-			
-				problem.setFieldNames(names);
-				returnToDisplayScreen(e);
+
+			problem.setFieldNames(names);
+			returnToDisplayScreen(e);
 		}
 	}
-	
+
 }

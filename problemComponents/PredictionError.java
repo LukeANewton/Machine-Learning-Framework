@@ -24,6 +24,8 @@ public class PredictionError implements Serializable{
 
 	/**returns the accuracy of the predictions we have been making so far*/
 	public double getAccuracy() {
+		if(numberOfCorrectPredicitons == 0 || numberOfPredictions == 0)
+			return 0;	
 		return ((double)numberOfCorrectPredicitons)/numberOfPredictions;
 	}
 	

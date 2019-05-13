@@ -530,9 +530,16 @@ public class MachineLearningFramework  extends JFrame{
 	private class OptimizeConfigListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
-				//warn user the task takes a while
-				int result = JOptionPane.showConfirmDialog(null, "This process can take some time, do you wish to continue?",
-						"confimation box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+				int result;
+				
+				//warn user the task takes a while and needs lots of data
+				if(problem.getNumberOfTrainingExamples() < 100){
+					 result = JOptionPane.showConfirmDialog(null, "This process is best suited towards sets with large amounts of data, do you wish to continue?",
+								"confimation box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+				}else{
+					 result = JOptionPane.showConfirmDialog(null, "This process can take some time, do you wish to continue?",
+								"confimation box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+				}
 
 				//if user says yes, continues with operation
 				if(result == JOptionPane.YES_OPTION){
