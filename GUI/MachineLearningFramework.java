@@ -18,6 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import Control.Prediction;
+import Control.ProblemConfiguration;
+import Control.ProblemOptimization;
 import compositeFeatureDistanceStrategies.CompositeDistanceStrategy;
 import exampleDistanceCombinationStrategies.ExampleDistanceStrategy;
 import problemComponents.CompositeFeature;
@@ -47,6 +49,14 @@ public class MachineLearningFramework  extends JFrame{
 	private boolean configuredPrediction;
 	//the number of nearest neighbors to find in prediction
 	private int k;
+	//the size to use in optimization alorithm pool
+	private int populationSize;
+	//number of generations to run optimization algorithm for
+	private int numberOfGenerations;
+	//mutation chance in optimization algorithm
+	private double mutationRate;
+	//seed value used in optimization algorithm
+	private int randomSeed;
 	//the example strategy to use in predictions
 	private ExampleDistanceStrategy exStrat;
 	//the composite strategy to use in predictions
@@ -75,6 +85,14 @@ public class MachineLearningFramework  extends JFrame{
 		problem = new Problem(1);
 		createdProblem = false;
 		configuredPrediction = false;
+		//initialize optimization parameters
+		populationSize = 100;
+		//number of generations to run optimization algorithm for
+		numberOfGenerations = 50;
+		//mutation chance in optimization algorithm
+		mutationRate = 0.001;
+		//seed value used in optimization algorithm
+		randomSeed = 123456789;
 		//set selected examples to -1 to indicate no selection
 		selectedTrainingExample = -1;
 		selectedTestExample = -1;
@@ -233,8 +251,10 @@ public class MachineLearningFramework  extends JFrame{
 
 		//create prediction menu
 		JMenu predictMenu = new JMenu("Prediction");
-		addMenuItem("configure predictions", predictMenu, new PredictConfigListener());
 		addMenuItem("make prediction", predictMenu, new PredictTestExampleListener());
+		addMenuItem("optimize configuration", predictMenu, new OptimizeConfigListener());
+		addMenuItem("manually configure", predictMenu, new PredictConfigListener());
+		
 		menuBar.add(predictMenu);
 
 		setJMenuBar(menuBar);
@@ -439,7 +459,7 @@ public class MachineLearningFramework  extends JFrame{
 		}
 	}
 
-	/**Action listener to predict an output value for a test example int the problem set*/
+	/**Action listener to set the strategies and weights in the problem set*/
 	private class PredictConfigListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem){
@@ -451,7 +471,28 @@ public class MachineLearningFramework  extends JFrame{
 		}
 	}
 
-	/**Action listener to predict an output value for a test example int the problem set*/
+	/**Action listener to automatically optimize the strategies and weights in the problem set*/
+	private class OptimizeConfigListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			if(createdProblem){
+				//warn user the task takes a while
+				int result = JOptionPane.showConfirmDialog(null, "This process can take some time, do you wish to continue?",
+						"confimation box", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+				//if user says yes, continues with operation
+				if(result == JOptionPane.YES_OPTION){
+					ProblemOptimization opt = new ProblemOptimization(populationSize, numberOfGenerations, mutationRate, randomSeed);
+					ProblemConfiguration pc = opt.optimizePrredictionConfiguration(problem);
+					problem = pc.getProblem();
+					k = pc.getK();
+				}
+			}else{
+				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
+			}
+		}
+	}
+	
+	/**Action listener to predict an output value for a test example in the problem set*/
 	private class PredictTestExampleListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(createdProblem && configuredPrediction && selectedTestExample >= 0){
