@@ -11,7 +11,7 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import Control.Prediction;
+import predictionElements.Prediction;
 import problemComponents.CompositeFeature;
 import problemComponents.Feature;
 import problemComponents.Problem;

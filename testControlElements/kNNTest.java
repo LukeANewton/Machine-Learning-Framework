@@ -4,8 +4,8 @@ package testControlElements;
 import org.junit.Before;
 import org.junit.Test;
 
-import Control.DistanceContentPair;
-import Control.kNN;
+import predictionElements.DistanceContentPair;
+import predictionElements.kNN;
 import problemComponents.CompositeFeature;
 import problemComponents.Feature;
 import problemComponents.Problem;

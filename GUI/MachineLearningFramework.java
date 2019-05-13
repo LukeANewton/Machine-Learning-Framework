@@ -17,11 +17,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import Control.Prediction;
-import Control.ProblemConfiguration;
-import Control.ProblemOptimization;
 import compositeFeatureDistanceStrategies.CompositeDistanceStrategy;
 import exampleDistanceCombinationStrategies.ExampleDistanceStrategy;
+import predictionElements.Prediction;
+import predictionElements.ProblemConfiguration;
+import predictionElements.ProblemOptimization;
 import problemComponents.CompositeFeature;
 import problemComponents.Feature;
 import problemComponents.Problem;
