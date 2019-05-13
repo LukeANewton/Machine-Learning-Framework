@@ -99,6 +99,38 @@ public class MachineLearningFramework  extends JFrame{
 		//setup options for frame and create menu bar
 		makeFrame();
 	}
+	
+	public int getPopulationSize() {
+		return populationSize;
+	}
+
+	public void setPopulationSize(int populationSize) {
+		this.populationSize = populationSize;
+	}
+
+	public int getNumberOfGenerations() {
+		return numberOfGenerations;
+	}
+
+	public void setNumberOfGenerations(int numberOfGenerations) {
+		this.numberOfGenerations = numberOfGenerations;
+	}
+
+	public double getMutationRate() {
+		return mutationRate;
+	}
+
+	public void setMutationRate(double mutationRate) {
+		this.mutationRate = mutationRate;
+	}
+
+	public int getRandomSeed() {
+		return randomSeed;
+	}
+
+	public void setRandomSeed(int randomSeed) {
+		this.randomSeed = randomSeed;
+	}
 
 	/**set indicator of whether a valid problem exists*/
 	public void setCreatedProblem(boolean createdProblem) {
@@ -252,8 +284,9 @@ public class MachineLearningFramework  extends JFrame{
 		//create prediction menu
 		JMenu predictMenu = new JMenu("Prediction");
 		addMenuItem("make prediction", predictMenu, new PredictTestExampleListener());
-		addMenuItem("optimize configuration", predictMenu, new OptimizeConfigListener());
-		addMenuItem("manually configure", predictMenu, new PredictConfigListener());
+		addMenuItem("optimize prediction configuration", predictMenu, new OptimizeConfigListener());
+		addMenuItem("manually configure prediction", predictMenu, new PredictConfigListener());
+		addMenuItem("optimization settings", predictMenu, new OptSettingsListener());
 		
 		menuBar.add(predictMenu);
 
@@ -468,6 +501,14 @@ public class MachineLearningFramework  extends JFrame{
 			}else{
 				JOptionPane.showMessageDialog(null, "Error: Please create/load a problem first");
 			}
+		}
+	}
+	
+	/**Action listener to set the parameters for optimization algorithm*/
+	private class OptSettingsListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+				setContentPane(new OptimiazationSettingsPanel(getWindowFromMenuItem((JMenuItem)e.getSource())));
+				pack();
 		}
 	}
 
